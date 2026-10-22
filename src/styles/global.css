@@ -1,0 +1,471 @@
+:root {
+  --bg: #05060a;
+  --text: #eef0f7;
+  --muted: rgba(238, 240, 247, 0.6);
+  --line: rgba(238, 240, 247, 0.16);
+  --accent: #a78bfa;
+  --cyan: #22d3ee;
+  --ok: #34d399;
+  --bad: #fb7185;
+  --font: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+[hidden] {
+  display: none !important;
+}
+
+html,
+body {
+  margin: 0;
+  height: 100%;
+  overflow: hidden;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font);
+  -webkit-font-smoothing: antialiased;
+  -webkit-tap-highlight-color: transparent;
+  overscroll-behavior: none;
+}
+
+body {
+  position: fixed;
+  inset: 0;
+  touch-action: none;
+  user-select: none;
+}
+
+#stage,
+#stage canvas {
+  position: fixed;
+  inset: 0;
+}
+
+#stage canvas {
+  display: block;
+  touch-action: none;
+}
+
+/* Viñeta: oscurece los bordes y centra la mirada (sin costo de GPU). */
+#vignette {
+  position: fixed;
+  inset: 0;
+  z-index: 10;
+  pointer-events: none;
+  background: radial-gradient(ellipse at center, transparent 60%, rgba(0, 0, 0, 0.45) 100%);
+}
+
+/* ---------- Loader ---------- */
+
+#loader {
+  position: fixed;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  color: var(--muted);
+  font-size: 13px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  transition: opacity 0.6s ease;
+  z-index: 50;
+}
+
+#loader.hide {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* ---------- Overlays (intro, toast, modal, win) ---------- */
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background: rgba(5, 6, 10, 0.72);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  animation: fade 0.3s ease both;
+}
+
+#intro {
+  background: radial-gradient(circle at 50% 30%, rgba(167, 139, 250, 0.22), transparent 60%), rgba(5, 6, 10, 0.92);
+}
+
+.panel {
+  width: min(440px, 100%);
+  max-height: 100%;
+  overflow-y: auto;
+  scrollbar-width: none;
+  padding: 28px;
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  background: rgba(14, 15, 22, 0.96);
+  box-shadow: 0 30px 80px -30px rgba(0, 0, 0, 0.9);
+  animation: rise 0.35s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+
+.panel::-webkit-scrollbar {
+  display: none;
+}
+
+.eyebrow {
+  margin: 0 0 12px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.eyebrow.ok {
+  color: var(--ok);
+}
+
+h1 {
+  margin: 0;
+  font-size: 34px;
+  line-height: 1.08;
+  letter-spacing: -0.02em;
+}
+
+h2 {
+  margin: 0;
+  font-size: 28px;
+  letter-spacing: -0.02em;
+}
+
+h3 {
+  margin: 0;
+  font-size: 22px;
+  letter-spacing: -0.01em;
+}
+
+.lede {
+  margin: 14px 0 22px;
+  color: var(--muted);
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+.lede.small {
+  font-size: 14px;
+  margin: 10px 0 18px;
+}
+
+.fineprint {
+  margin: 18px 0 0;
+  font-size: 12px;
+  color: var(--muted);
+}
+
+/* Autorización para guardar las respuestas (solo si hay una hoja configurada) */
+.consent {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin: 0 0 18px;
+  font-size: 13px;
+  line-height: 1.45;
+  color: var(--muted);
+  cursor: pointer;
+}
+
+.consent input {
+  flex: 0 0 auto;
+  width: 18px;
+  height: 18px;
+  margin: 1px 0 0;
+  accent-color: var(--accent);
+}
+
+/* ---------- Botones ---------- */
+
+.btn {
+  width: 100%;
+  height: 52px;
+  border: 0;
+  border-radius: 14px;
+  background: var(--accent);
+  color: #15102b;
+  font: inherit;
+  font-size: 16px;
+  font-weight: 650;
+  cursor: pointer;
+  transition: transform 0.14s, filter 0.2s;
+}
+
+.btn.ghost {
+  background: transparent;
+  color: var(--text);
+  border: 1px solid var(--line);
+}
+
+.btn:hover {
+  filter: brightness(1.08);
+}
+
+.btn:active {
+  transform: scale(0.98);
+}
+
+.row {
+  display: flex;
+  gap: 10px;
+  margin-top: 4px;
+}
+
+.row .btn {
+  flex: 1;
+}
+
+/* ---------- Campos ---------- */
+
+label {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 13px;
+  color: var(--muted);
+}
+
+input {
+  width: 100%;
+  height: 52px;
+  padding: 0 15px;
+  margin-bottom: 4px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text);
+  font: inherit;
+  font-size: 16px;
+  outline: none;
+  user-select: text;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+input::placeholder {
+  color: rgba(238, 240, 247, 0.32);
+}
+
+input:focus {
+  border-color: var(--ok);
+  box-shadow: 0 0 0 3px rgba(52, 211, 153, 0.22);
+}
+
+input[aria-invalid='true'] {
+  border-color: var(--bad);
+  box-shadow: 0 0 0 3px rgba(251, 113, 133, 0.2);
+}
+
+.error {
+  margin: 6px 2px 14px;
+  min-height: 0;
+  color: var(--bad);
+  font-size: 13px;
+}
+
+.error:empty {
+  display: none;
+}
+
+/* ---------- HUD ---------- */
+
+#hud {
+  position: fixed;
+  inset: 0;
+  z-index: 20;
+  pointer-events: none;
+}
+
+#objective {
+  position: absolute;
+  top: calc(env(safe-area-inset-top, 0px) + 14px);
+  left: 0;
+  right: 0;
+  width: fit-content;
+  /* centrada sin tocar el botón de sonido: 14px de margen + 40px + 8px de aire, a cada lado */
+  max-width: min(86vw, calc(100% - 124px));
+  margin: 0 auto;
+  padding: 9px 18px;
+  border: 1px solid rgba(167, 139, 250, 0.4);
+  border-radius: 20px;
+  background: rgba(14, 15, 22, 0.92);
+  box-shadow: 0 6px 24px -8px rgba(0, 0, 0, 0.8);
+  font-size: 14px;
+  line-height: 1.35;
+  color: var(--text);
+  text-align: center;
+  /* en el celular, un objetivo largo pasa a dos líneas en vez de cortarse */
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  overflow: hidden;
+  transition: opacity 0.3s;
+}
+
+#prompt {
+  position: absolute;
+  bottom: calc(env(safe-area-inset-bottom, 0px) + 116px);
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 8px 16px;
+  border-radius: 999px;
+  background: rgba(14, 15, 22, 0.86);
+  border: 1px solid var(--line);
+  font-size: 14px;
+  color: var(--text);
+  white-space: nowrap;
+  animation: fade 0.2s ease both;
+}
+
+#hint {
+  position: absolute;
+  bottom: calc(env(safe-area-inset-bottom, 0px) + 12px);
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 12px;
+  color: var(--muted);
+  text-align: center;
+  padding: 0 16px;
+  transition: opacity 0.5s;
+}
+
+/* Joystick táctil */
+
+#pad {
+  position: absolute;
+  bottom: calc(env(safe-area-inset-bottom, 0px) + 28px);
+  left: 26px;
+  width: 128px;
+  height: 128px;
+  border-radius: 50%;
+  border: 1px solid var(--line);
+  background: rgba(14, 15, 22, 0.5);
+  pointer-events: auto;
+  touch-action: none;
+}
+
+#stick {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 54px;
+  height: 54px;
+  margin: -27px 0 0 -27px;
+  border-radius: 50%;
+  background: rgba(167, 139, 250, 0.55);
+  border: 1px solid rgba(167, 139, 250, 0.9);
+  transition: background 0.2s;
+}
+
+/* Joystick solo en modo táctil (clase añadida por JS); teclas en escritorio */
+#pad {
+  display: none;
+}
+
+.k-touch {
+  display: none;
+}
+
+body.touch #pad {
+  display: block;
+}
+
+/* En el celular la ayuda va a la derecha del joystick, no encima */
+body.touch #hint {
+  left: 170px;
+  right: 16px;
+  bottom: calc(env(safe-area-inset-bottom, 0px) + 72px);
+  padding: 0;
+  transform: none;
+}
+
+body.touch .k-desktop {
+  display: none;
+}
+
+body.touch .k-touch {
+  display: inline;
+}
+
+
+/* ---------- Escribir sobre pantallas 3D ---------- */
+
+/* Enfocable pero invisible: recibe el teclado (también el del celular). Va ARRIBA:
+   si estuviera abajo, al abrir el teclado Chrome desplazaría la vista para mostrarlo. */
+#typer {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 1px;
+  height: 1px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  opacity: 0;
+  font-size: 16px; /* evita el zoom automático de iOS al enfocar */
+  pointer-events: none;
+}
+
+/* Mientras se escribe, solo queda la pantalla 3D: nada tapa el texto sobre el teclado. */
+body.typing #pad,
+body.typing #hint,
+body.typing #prompt,
+body.typing #objective {
+  display: none !important;
+}
+
+/* ---------- Animaciones ---------- */
+
+@keyframes fade {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+}
+
+.no-webgl #intro .lede::after {
+  content: ' (Tu navegador no soporta WebGL, necesario para este simulador.)';
+  color: var(--bad);
+}
+
+/* ---------- Botón de silencio ---------- */
+
+#mute {
+  position: absolute;
+  top: calc(env(safe-area-inset-top, 0px) + 12px);
+  right: 14px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1px solid var(--line);
+  background: rgba(14, 15, 22, 0.78);
+  color: var(--muted);
+  display: grid;
+  place-items: center;
+  padding: 0;
+  cursor: pointer;
+  pointer-events: auto;
+  transition: color 0.2s, border-color 0.2s;
+}
+
+#mute:hover {
+  color: var(--text);
+  border-color: rgba(238, 240, 247, 0.3);
+}
+

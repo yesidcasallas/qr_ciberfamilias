@@ -1,0 +1,165 @@
+---
+// Formulario sencillo (la alternativa al simulador): correo y universidad, y agradecimiento.
+import Ciber from '../layouts/Ciber.astro';
+import Seal from '../components/Seal.astro';
+
+// Con PUBLIC_SHEETS_URL las respuestas van a Google Sheets, siempre con autorización.
+const saving = Boolean(import.meta.env.PUBLIC_SHEETS_URL);
+---
+
+<Ciber
+  title="Formulario · CiberFamilias"
+  description="Formulario de la actividad del Proyecto CiberFamilias: escribe tu correo y tu universidad."
+>
+  <header class="topbar">
+    <a class="back" href="/portal">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M11 18l-6-6 6-6" /></svg>
+      Portal
+    </a>
+    <span class="brand"><Seal /><span>Ciber<span class="fam">Familias</span></span></span>
+  </header>
+
+  <main class="form-page">
+    <section class="panel" id="paso-form" aria-labelledby="form-titulo">
+      <Seal />
+      <p class="eyebrow">Proyecto CiberFamilias</p>
+      <h1 id="form-titulo">Formulario</h1>
+      <p class="intro">Escribe tu correo y tu universidad para finalizar.</p>
+
+      <form id="form" method="post" novalidate>
+        <div class="field">
+          <label for="correo">Correo electrónico</label>
+          <input
+            id="correo"
+            name="correo"
+            type="email"
+            inputmode="email"
+            autocomplete="email"
+            autocapitalize="off"
+            spellcheck="false"
+            enterkeyhint="next"
+            placeholder="nombre@correo.com"
+            required
+            aria-describedby="correo-error"
+          />
+          <p class="error" id="correo-error" aria-live="polite"></p>
+        </div>
+        <div class="field">
+          <label for="universidad">Universidad</label>
+          <input
+            id="universidad"
+            name="universidad"
+            type="text"
+            autocomplete="organization"
+            enterkeyhint="done"
+            placeholder="Nombre de tu universidad"
+            required
+            aria-describedby="universidad-error"
+          />
+          <p class="error" id="universidad-error" aria-live="polite"></p>
+        </div>
+        {
+          saving && (
+            <div class="field">
+              <label class="consent">
+                <input id="autorizo" name="autorizo" type="checkbox" aria-describedby="autorizo-error" />
+                <span>
+                  Autorizo al Proyecto CiberFamilias (UNIMINUTO) a guardar mi correo y mi universidad solo para
+                  registrar mi participación en esta actividad (Ley 1581 de 2012). Si soy menor de edad, cuento con la
+                  autorización de mi acudiente.
+                </span>
+              </label>
+              <p class="error" id="autorizo-error" aria-live="polite"></p>
+            </div>
+          )
+        }
+        <button class="btn block" type="submit">Finalizar</button>
+      </form>
+      <p class="fineprint">
+        {
+          saving
+            ? 'Tus datos se usan solo para esta actividad y no se comparten.'
+            : 'Actividad educativa: lo que escribas no se envía ni se guarda.'
+        }
+      </p>
+    </section>
+
+    <section class="panel done" id="paso-gracias" aria-labelledby="gracias" hidden>
+      <Seal />
+      <p class="eyebrow ok">Formulario completado</p>
+      <p class="title"><small>Proyecto </small>Ciber<span class="fam">Familias</span></p>
+      <h1 id="gracias" tabindex="-1">¡Gracias por completar el formulario!</h1>
+      <dl class="summary">
+        <div><dt>Correo</dt><dd id="r-correo"></dd></div>
+        <div><dt>Universidad</dt><dd id="r-universidad"></dd></div>
+      </dl>
+      <div class="team">
+        <p class="eyebrow">Integrantes</p>
+        <ul>
+          <li>Laura Tatiana</li>
+          <li>Daniel Casallas</li>
+          <li>Yasmin Becerra</li>
+        </ul>
+      </div>
+      <p class="closing">El conocimiento es el camino hacia una vida digital más segura y tranquila.</p>
+      <a class="btn ghost block" href="/portal">Volver al portal</a>
+    </section>
+  </main>
+</Ciber>
+
+<script>
+  import { saveResponse } from '../scripts/registro.js';
+  import { esCorreoValido, esUniversidadValida, normalizarUniversidad } from '../entities/participacion.js';
+
+  // Valida con las reglas de la entidad y muestra el agradecimiento. Solo con autorización (y una hoja
+  // configurada) se guarda.
+  const form = document.getElementById('form');
+  const correo = document.getElementById('correo');
+  const universidad = document.getElementById('universidad');
+  const autorizo = document.getElementById('autorizo'); // solo existe si se guardan las respuestas
+
+  function setError(input, message) {
+    input.closest('.field').classList.toggle('invalid', Boolean(message));
+    input.setAttribute('aria-invalid', message ? 'true' : 'false');
+    document.getElementById(`${input.id}-error`).textContent = message;
+  }
+
+  // En el celular, "siguiente" en el correo pasa a la universidad en vez de enviar.
+  correo.addEventListener('keydown', (e) => {
+    if (e.key !== 'Enter') return;
+    e.preventDefault();
+    universidad.focus();
+  });
+  for (const input of [correo, universidad, autorizo].filter(Boolean)) {
+    input.addEventListener(input === autorizo ? 'change' : 'input', () => {
+      if (input.getAttribute('aria-invalid') === 'true') setError(input, '');
+    });
+  }
+
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const email = correo.value.trim();
+    const university = normalizarUniversidad(universidad.value);
+    const emailError = esCorreoValido(email) ? '' : 'Escribe un correo válido, por ejemplo nombre@correo.com';
+    const universityError = esUniversidadValida(university) ? '' : 'Escribe el nombre de tu universidad';
+    const consentError = autorizo && !autorizo.checked ? 'Marca la autorización para poder enviar' : '';
+    setError(correo, emailError);
+    setError(universidad, universityError);
+    if (autorizo) setError(autorizo, consentError);
+    const firstInvalid = [emailError && correo, universityError && universidad, consentError && autorizo].find(Boolean);
+    if (firstInvalid) {
+      firstInvalid.focus();
+      return;
+    }
+
+    if (autorizo) saveResponse({ origen: 'formulario', correo: email, universidad: university });
+    document.getElementById('r-correo').textContent = email;
+    document.getElementById('r-universidad').textContent = university;
+    form.reset();
+    document.getElementById('paso-form').hidden = true;
+    document.getElementById('paso-gracias').hidden = false;
+    window.scrollTo(0, 0);
+    // el foco pasa al agradecimiento: cierra el teclado del celular y lo anuncia el lector de pantalla
+    document.getElementById('gracias').focus({ preventScroll: true });
+  });
+</script>

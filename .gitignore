@@ -1,0 +1,16 @@
+node_modules/
+dist/
+.astro/
+.env
+.env.*
+!.env.example
+.vercel/
+.netlify/
+.playwright-mcp/
+
+# Bitácora del CLI de Meshy (contiene URLs firmadas)
+meshy_output/
+
+# Herramientas locales de Claude Code: skills de terceros (anotados en skills-lock.json) y permisos personales
+.claude/skills/
+.claude/settings.local.json

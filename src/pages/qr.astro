@@ -1,0 +1,89 @@
+---
+// Pantalla para proyectar: el QR que lleva al portal de la actividad.
+import Ciber from '../layouts/Ciber.astro';
+import Seal from '../components/Seal.astro';
+---
+
+<Ciber
+  title="Escanea para participar · CiberFamilias"
+  description="Pantalla con el código QR para entrar a la actividad del Proyecto CiberFamilias."
+  bodyClass="qr-page"
+>
+  <main class="qr-layout">
+    <div class="qr-copy">
+      <Seal />
+      <p class="eyebrow">Actividad de seguridad digital</p>
+      <h1 class="title"><small>Proyecto </small>Ciber<span class="fam">Familias</span></h1>
+      <p class="cta">Escanea el código para participar</p>
+      <ol class="steps">
+        <li>Abre la cámara de tu celular</li>
+        <li>Apunta al código QR</li>
+        <li>Elige: simulador 3D o formulario</li>
+      </ol>
+      <p class="qr-quote">El conocimiento es el camino hacia una vida digital más segura y tranquila.</p>
+    </div>
+
+    <div class="qr-slot">
+      <figure class="qr-card">
+        <div class="qr-code" id="qr" role="img" aria-label="Código QR para entrar a la actividad"></div>
+        <figcaption class="qr-url" id="qr-url"></figcaption>
+      </figure>
+    </div>
+  </main>
+
+  <button class="fs-btn" id="fs" type="button" aria-label="Pantalla completa" title="Pantalla completa (F)">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9V4h5M15 4h5v5M20 15v5h-5M9 20H4v-5" /></svg>
+  </button>
+
+  <p class="qr-note" id="qr-note" hidden>
+    Los celulares no pueden abrir <b>localhost</b>: abre esta pantalla con la dirección de red que
+    muestra <code>pnpm dev</code> (Network) o desde el sitio publicado.
+  </p>
+</Ciber>
+
+<script>
+  import QRCode from 'qrcode';
+
+  // El QR lleva al portal del mismo sitio donde se abre esta pantalla: sirve en la red local
+  // y una vez publicado. Con ?url=https://… apunta a otra dirección.
+  let target = new URL('/portal', location.origin);
+  const custom = new URLSearchParams(location.search).get('url');
+  if (custom) {
+    try {
+      const url = new URL(custom);
+      if (url.protocol === 'https:' || url.protocol === 'http:') target = url;
+    } catch {
+      // dirección inválida: se queda el portal de este sitio
+    }
+  }
+
+  const box = document.getElementById('qr');
+  QRCode.toString(target.href, {
+    type: 'svg',
+    errorCorrectionLevel: 'M',
+    margin: 2,
+    color: { dark: '#0b0c12', light: '#ffffff' },
+  })
+    .then((svg) => {
+      box.innerHTML = svg;
+    })
+    .catch(() => {
+      box.textContent = 'No se pudo generar el código QR';
+    });
+
+  document.getElementById('qr-url').textContent = `${target.host}${target.pathname.replace(/\/$/, '')}${target.search}`;
+  document.getElementById('qr-note').hidden = !['localhost', '127.0.0.1', '[::1]'].includes(target.hostname);
+
+  // Pantalla completa para proyectar (botón o tecla F).
+  const fs = document.getElementById('fs');
+  const toggle = () =>
+    document.fullscreenElement ? document.exitFullscreen() : document.documentElement.requestFullscreen();
+  if (document.fullscreenEnabled) {
+    fs.addEventListener('click', toggle);
+    addEventListener('keydown', (e) => {
+      if (e.key === 'f' || e.key === 'F') toggle();
+    });
+  } else {
+    fs.hidden = true;
+  }
+</script>

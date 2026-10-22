@@ -1,0 +1,189 @@
+---
+// Portal al que lleva el QR: presenta CiberFamilias y deja elegir cómo participar.
+import Ciber from '../layouts/Ciber.astro';
+import Seal from '../components/Seal.astro';
+---
+
+<Ciber title="CiberFamilias · Elige cómo participar" bodyClass="portal">
+  <main>
+    <section class="hero" aria-labelledby="titulo">
+      <Seal />
+      <p class="eyebrow">Actividad de seguridad digital</p>
+      <h1 class="title" id="titulo"><small>Proyecto </small>Ciber<span class="fam">Familias</span></h1>
+      <p class="lede">El conocimiento es el camino hacia una vida digital más segura y tranquila.</p>
+
+      <p class="choices-label">Elige cómo quieres participar</p>
+      <nav class="choices" aria-label="Formas de participar">
+        <a class="choice" href="/">
+          <span class="icon" aria-hidden="true">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="6" y="2.5" width="12" height="19" rx="3" />
+              <path d="M12 8.2 15.1 10v3.6L12 15.4l-3.1-1.8V10z" />
+              <path d="M12 11.8v3.6M12 11.8 8.9 10M12 11.8l3.1-1.8" />
+            </svg>
+          </span>
+          <div>
+            <h2>Simulador 3D</h2>
+            <p>Entra a un teléfono y crúzalo sin caer en fraudes digitales.</p>
+            <span class="meta">Interactivo · con sonido</span>
+          </div>
+          <span class="go" aria-hidden="true">
+            <span class="go-label">Entrar</span>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
+          </span>
+        </a>
+
+        <a class="choice" href="/formulario">
+          <span class="icon" aria-hidden="true">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="5" y="3" width="14" height="18" rx="2.5" />
+              <path d="M9 8h6M9 12h6M9 16h3.5" />
+            </svg>
+          </span>
+          <div>
+            <h2>Formulario</h2>
+            <p>La versión sencilla: tu correo y tu universidad, y listo.</p>
+            <span class="meta">Rápido · sin animaciones</span>
+          </div>
+          <span class="go" aria-hidden="true">
+            <span class="go-label">Llenar</span>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
+          </span>
+        </a>
+      </nav>
+
+      <a class="more" href="#que-es">
+        Conoce el proyecto
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6" /></svg>
+      </a>
+    </section>
+
+    <div class="about">
+      <section class="section" aria-labelledby="que-es">
+        <h2 id="que-es">¿Qué es CiberFamilias?</h2>
+        <p>
+          Es un proyecto socioeducativo de apropiación social del conocimiento, desarrollado desde el programa
+          de <strong>Ingeniería de Sistemas</strong> de la <strong>Corporación Universitaria Minuto de Dios (UNIMINUTO)</strong>.
+        </p>
+        <p>
+          Fortalece los conocimientos y las prácticas de seguridad digital de estudiantes, padres de familia y cuidadores,
+          para que las familias se desenvuelvan con más confianza en los entornos digitales, reconozcan posibles amenazas
+          y tomen decisiones informadas sobre su información, su privacidad y su bienestar.
+        </p>
+        <p class="note">
+          No es una empresa de antivirus ni una herramienta de vigilancia: es una iniciativa educativa centrada en el
+          conocimiento, la prevención y el acompañamiento familiar.
+        </p>
+      </section>
+
+      <section class="section" aria-labelledby="para-quien">
+        <h2 id="para-quien">¿A quién está dirigido?</h2>
+        <div class="cards">
+          <article class="card">
+            <span class="tag">Grados 10.º y 11.º</span>
+            <h3>Estudiantes</h3>
+            <p>
+              Identificar amenazas, proteger sus cuentas y datos personales, usar las redes sociales con responsabilidad y
+              reconocer situaciones potencialmente peligrosas.
+            </p>
+          </article>
+          <article class="card">
+            <span class="tag">Familias</span>
+            <h3>Padres de familia y cuidadores</h3>
+            <p>
+              Comprender los riesgos digitales, usar herramientas de protección y control parental, orientar a los menores
+              y fortalecer el diálogo familiar sobre la tecnología.
+            </p>
+          </article>
+        </div>
+      </section>
+
+      <section class="section" aria-labelledby="temas">
+        <h2 id="temas">Temas que aborda</h2>
+        <p>Una cultura de prevención, autocuidado y responsabilidad digital.</p>
+        <ul class="chips">
+          <li>Fraude electrónico y phishing</li>
+          <li>Robo de información y suplantación de identidad</li>
+          <li>Ciberacoso y grooming</li>
+          <li>Protección de datos personales</li>
+          <li>Uso responsable de redes sociales</li>
+          <li>Control parental</li>
+          <li>Acompañamiento familiar</li>
+        </ul>
+      </section>
+
+      <section class="section" aria-labelledby="como">
+        <h2 id="como">¿Cómo funciona?</h2>
+        <p>
+          Combina formación virtual, recursos didácticos y actividades presenciales en dos rutas formativas, desarrolladas
+          en Google Classroom.
+        </p>
+        <div class="stats">
+          <div class="stat"><b>7</b><span>módulos para estudiantes</span></div>
+          <div class="stat"><b>8</b><span>módulos para padres y cuidadores</span></div>
+          <div class="stat"><b>15</b><span>módulos en total</span></div>
+        </div>
+        <p>
+          Incluye jornadas de sensibilización, acompañamiento pedagógico, actividades interactivas como Kahoot y
+          evaluaciones iniciales y finales para identificar conocimientos y aprendizajes.
+        </p>
+        <p>
+          El Colegio Nicolás Buenaventura IED de Bogotá ha sido parte del contexto educativo de intervención, en
+          articulación con UNIMINUTO.
+        </p>
+      </section>
+
+      <section class="section" aria-labelledby="alcance">
+        <h2 id="alcance">Alcance</h2>
+        <div class="reach">
+          <b>162</b>
+          <p>
+            estudiantes han participado en la experiencia formativa.
+            <small>
+              La cifra corresponde a participación. El proyecto evalúa los conocimientos adquiridos para mejorar
+              continuamente sus estrategias educativas.
+            </small>
+          </p>
+        </div>
+      </section>
+
+      <section class="section" aria-labelledby="futuro">
+        <span class="tag">Evolución prevista</span>
+        <h2 id="futuro">Hacia dónde vamos</h2>
+        <p>
+          CiberFamilias contempla evolucionar hacia una plataforma educativa propia que amplíe la formación y el
+          acompañamiento. Entre las mejoras proyectadas:
+        </p>
+        <ul class="list">
+          <li>Módulos sobre inteligencia artificial y su uso ético, crítico y responsable.</li>
+          <li>Riesgos emergentes: suplantaciones mediante IA, contenidos manipulados y fraudes digitales.</li>
+          <li>Migración progresiva desde Google Classroom hacia una plataforma desarrollada para CiberFamilias.</li>
+          <li>Funcionalidades de inteligencia artificial integradas para apoyar los procesos educativos.</li>
+        </ul>
+        <p class="fine">Son mejoras en proyección: todavía no están implementadas.</p>
+      </section>
+
+      <section class="section" aria-labelledby="identidad">
+        <h2 id="identidad">Nuestra identidad</h2>
+        <ul class="values">
+          <li><b>Conocimiento</b><span>Aprender a reconocer riesgos y tomar decisiones informadas.</span></li>
+          <li><b>Protección</b><span>Comprender y aplicar prácticas de seguridad digital.</span></li>
+          <li><b>Familia</b><span>Promover el acompañamiento y la responsabilidad compartida.</span></li>
+          <li><b>Confianza</b><span>Desenvolverse en entornos digitales con mayor tranquilidad.</span></li>
+          <li><b>Futuro</b><span>Avanzar hacia una sociedad digital más preparada y consciente.</span></li>
+        </ul>
+        <p class="vision">
+          <strong>Visión.</strong> Consolidar CiberFamilias como una iniciativa educativa y tecnológica que contribuya
+          al fortalecimiento de la seguridad digital en las comunidades educativas y familiares, promoviendo la
+          prevención, el pensamiento crítico, el autocuidado y la apropiación social del conocimiento.
+        </p>
+      </section>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <p class="brand"><Seal /><span>Proyecto Ciber<span class="fam">Familias</span></span></p>
+    <p>Ingeniería de Sistemas · UNIMINUTO</p>
+    <p>Integrantes: Laura Tatiana · Daniel Casallas · Yasmin Becerra</p>
+  </footer>
+</Ciber>

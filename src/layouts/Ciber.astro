@@ -1,0 +1,53 @@
+---
+/**
+ * Plantilla del portal, el formulario sencillo y la pantalla del QR de CiberFamilias.
+ * El simulador (index.astro) tiene la suya: nada de aquí lo afecta.
+ */
+import '../styles/ciber.css';
+
+const {
+  title,
+  description = 'Proyecto CiberFamilias: el conocimiento es el camino hacia una vida digital más segura y tranquila.',
+  bodyClass,
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#05060a" />
+    <meta name="description" content={description} />
+    <link rel="icon" href="/ciberfamilias.svg" type="image/svg+xml" />
+    <title>{title}</title>
+  </head>
+  <body class={bodyClass}>
+    <!-- Horizonte abierto y un camino que se pierde en él: el conocimiento como camino. -->
+    <div class="horizon" aria-hidden="true">
+      <svg viewBox="0 0 100 100" preserveAspectRatio="none">
+        <defs>
+          <linearGradient id="camino" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#a78bfa" stop-opacity="0" />
+            <stop offset="1" stop-color="#a78bfa" stop-opacity="0.1" />
+          </linearGradient>
+        </defs>
+        <path d="M50 0 L30 100 L70 100 Z" fill="url(#camino)" />
+        <g fill="none" stroke="#c4b5fd" stroke-width="1">
+          <path vector-effect="non-scaling-stroke" stroke-opacity="0.34" d="M50 0 L30 100 M50 0 L70 100" />
+          <path
+            vector-effect="non-scaling-stroke"
+            stroke-opacity="0.08"
+            d="M50 0 L-70 100 M50 0 L-24 100 M50 0 L6 100 M50 0 L94 100 M50 0 L124 100 M50 0 L170 100"
+          />
+          <path
+            vector-effect="non-scaling-stroke"
+            stroke-opacity="0.07"
+            d="M0 4 H100 M0 10 H100 M0 19 H100 M0 32 H100 M0 50 H100 M0 75 H100"
+          />
+        </g>
+      </svg>
+    </div>
+    <slot />
+  </body>
+</html>

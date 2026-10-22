@@ -1,0 +1,23 @@
+---
+/** Sello de CiberFamilias: escudo (seguridad) con una familia, el mismo del final del simulador. */
+const { class: className } = Astro.props;
+---
+
+<svg
+  class:list={['seal', className]}
+  viewBox="-64 -66 128 148"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="4"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  aria-hidden="true"
+>
+  <path d="M0 -62C26 -50 48 -48 60 -46L60 2C60 42 32 64 0 78C-32 64 -60 42 -60 2L-60 -46C-48 -48 -26 -50 0 -62Z" />
+  <g fill="currentColor" stroke="none">
+    <circle cx="-24" cy="-12" r="8" />
+    <circle cx="0" cy="-20" r="10" />
+    <circle cx="24" cy="-12" r="8" />
+  </g>
+  <path d="M-37 34Q-37 2 -24 2Q-11 2 -11 34M-16 34Q-16 -4 0 -4Q16 -4 16 34M11 34Q11 2 24 2Q37 2 37 34" />
+</svg>
