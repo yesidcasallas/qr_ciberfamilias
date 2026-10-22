@@ -962,6 +962,7 @@ html:has(.portal) {
 .qr-code {
   width: min(76vw, 50vh); /* navegadores sin container queries */
   width: min(calc(100cqw - 2 * var(--qr-pad)), calc(100cqh - 2 * var(--qr-pad) - var(--qr-cap)));
+  margin-inline: auto;
   aspect-ratio: 1;
 }
 
