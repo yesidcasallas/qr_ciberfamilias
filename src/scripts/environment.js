@@ -13,7 +13,7 @@ import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.j
  *
  * Integración:
  *   - Todos los materiales respetan la niebla (fog: true por defecto) menos el cielo, que la ignora.
- *     Pensado para scene.fog = new THREE.FogExp2(0x05060a, 0.03).
+ *     Pensado para scene.fog = new THREE.FogExp2(0x071126, 0.03).
  *   - El cielo pone su profundidad en el plano lejano (gl_Position.z = w): se ve aunque camera.far sea
  *     menor que su radio, siempre queda detrás de todo y no escribe profundidad.
  *   - Nada sólido dentro de x∈[-5.4, 5.4]; solo las partículas flotan en la zona caminable.
@@ -25,16 +25,16 @@ import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.j
  *   env.update(dt, t); // en el bucle existente, junto a world.update(dt, t)
  */
 
-// Paleta neón del proyecto.
-const VIOLETA = 0xa78bfa;
-const CIAN = 0x22d3ee;
+// Paleta del proyecto (Amalfi).
+const BRISA = 0x86c5ff; // Sea Breeze
+const CITRICO = 0xffa62b; // Citrus Zest
 
 // ---------- Cielo ----------
 const CIELO_RADIO = 120;
 const CIELO_Z = -17; // centro del pasillo
-const CIELO_ABAJO = 0x05060a;
-const CIELO_MEDIO = 0x0d0c15; // sobrio: casi neutro
-const CIELO_ARRIBA = 0x1b1530; // violeta apagado
+const CIELO_ABAJO = 0x071126;
+const CIELO_MEDIO = 0x0c1a35; // azul noche
+const CIELO_ARRIBA = 0x1d3566; // Amalfi apagado
 const CIELO_BANDA = 0.04; // banda del horizonte apenas insinuada
 
 // Estética minimalista: neones apagados (se pueden reactivar cambiando esta constante).
@@ -50,12 +50,12 @@ const COL_PASO = 5;
 // ---------- Neón ----------
 // El bloom (threshold ≈ 0.62) solo deja pasar los píxeles cuya luminancia LINEAL supera el umbral; con
 // EffectComposer el tone mapping lo aplica OutputPass al final, así que toneMapped:false no cambia eso.
-// Luminancia lineal: violeta ≈ 0.336 y cian ≈ 0.531. Violeta ×1.6 daría 0.54 (no brillaría): por eso ×2.6.
+// Luminancia lineal: Sea Breeze ≈ 0.522 y Citrus ≈ 0.487. Sea Breeze ×1.67 da ≈ 0.87 (como el brisa ×2.6 de antes).
 const BARRA_X = 5.93;
 const BARRA_GROSOR = 0.04; // en x: ocupa [5.91, 5.95], justo detrás del plano de los anuncios (x = ±5.9), sin z-fighting
 const BARRA_ALTO = 4.6;
 const BARRA_ANCHO = 0.06; // en z
-const BARRA_INTENSIDAD = 2.6; // lum ≈ 0.87
+const BARRA_INTENSIDAD = 1.67; // lum ≈ 0.87
 const BARRA_PULSO = 0.12; // ±12 % → lum ≈ [0.77, 0.98]: de cerca nunca baja del umbral (el bloom no parpadea)
 const ONDA_W = 1.4; // rad/s
 const ONDA_K = 0.3; // rad por unidad de z: la onda de brillo avanza hacia -Z a ≈ 4.7 u/s
@@ -91,8 +91,8 @@ export function createEnvironment({ scene }) {
       uAbajo: { value: new THREE.Color(CIELO_ABAJO) },
       uMedio: { value: new THREE.Color(CIELO_MEDIO) },
       uArriba: { value: new THREE.Color(CIELO_ARRIBA) },
-      uVioleta: { value: new THREE.Color(VIOLETA) },
-      uCian: { value: new THREE.Color(CIAN) },
+      uBrisa: { value: new THREE.Color(BRISA) },
+      uCitrico: { value: new THREE.Color(CITRICO) },
       uBanda: { value: CIELO_BANDA },
       uTime: { value: 0 },
     },
@@ -110,8 +110,8 @@ export function createEnvironment({ scene }) {
       uniform vec3 uAbajo;
       uniform vec3 uMedio;
       uniform vec3 uArriba;
-      uniform vec3 uVioleta;
-      uniform vec3 uCian;
+      uniform vec3 uBrisa;
+      uniform vec3 uCitrico;
       uniform float uBanda;
       uniform float uTime;
       varying vec3 vDir;
@@ -126,9 +126,9 @@ export function createEnvironment({ scene }) {
 
         // Banda tenue de brillo en el horizonte: centro fino + halo amplio.
         float banda = 0.75 * exp(-abs(h) * 18.0) + 0.25 * exp(-abs(h) * 5.0);
-        // Tono violeta <-> cian que cambia con el rumbo y deriva muy lento (sin atan: evita la singularidad de los polos).
+        // Tono Sea Breeze <-> Citrus que cambia con el rumbo y deriva muy lento (sin atan: evita la singularidad de los polos).
         float k = 0.5 + 0.5 * sin(dir.x * 2.6 + dir.z * 1.7 + uTime * 0.07);
-        col += mix(uVioleta, uCian, k) * (banda * uBanda);
+        col += mix(uBrisa, uCitrico, k) * (banda * uBanda);
 
         gl_FragColor = vec4(col, 1.0);
         #include <tonemapping_fragment>
@@ -161,7 +161,7 @@ export function createEnvironment({ scene }) {
   const barras = new THREE.InstancedMesh(
     new THREE.BoxGeometry(BARRA_GROSOR, BARRA_ALTO, BARRA_ANCHO),
     // Color sobreexpuesto => supera el umbral de bloom. El pulso va en instanceColor, que multiplica a este color.
-    new THREE.MeshBasicMaterial({ color: new THREE.Color(VIOLETA).multiplyScalar(BARRA_INTENSIDAD), toneMapped: false }),
+    new THREE.MeshBasicMaterial({ color: new THREE.Color(BRISA).multiplyScalar(BARRA_INTENSIDAD), toneMapped: false }),
     nCol,
   );
   barras.name = 'env-barras';
@@ -182,7 +182,7 @@ export function createEnvironment({ scene }) {
   group.add(columnas, barras);
 
   // ---------- 3b. Tiras de neón en el borde del piso (2 instancias, un draw call) ----------
-  const tiraBase = new THREE.Color(CIAN).multiplyScalar(TIRA_INTENSIDAD);
+  const tiraBase = new THREE.Color(CITRICO).multiplyScalar(TIRA_INTENSIDAD);
   const tiras = new THREE.InstancedMesh(
     new THREE.BoxGeometry(0.05, 0.03, TIRA_LARGO),
     new THREE.MeshBasicMaterial({ color: tiraBase, toneMapped: false }),
@@ -227,7 +227,7 @@ export function createEnvironment({ scene }) {
 
   const posiciones = new Float32Array(N_PART * 3);
   const colores = new Float32Array(N_PART * 3);
-  const violeta = new THREE.Color(VIOLETA);
+  const brisa = new THREE.Color(BRISA);
   const blanco = new THREE.Color(1, 1, 1);
   const c = new THREE.Color();
   for (let p = 0; p < N_PART; p++) {
@@ -240,8 +240,8 @@ export function createEnvironment({ scene }) {
     vx[p] = THREE.MathUtils.randFloatSpread(2 * DERIVA_X) / RX;
     vy[p] = THREE.MathUtils.randFloatSpread(2 * DERIVA_Y) / (RY - 2 * amp[p]);
     vz[p] = THREE.MathUtils.randFloatSpread(2 * DERIVA_Z) / RZ;
-    // Blanco violáceo tenue: ninguna partícula llega al umbral de bloom.
-    c.copy(violeta).lerp(blanco, 0.45).multiplyScalar(0.16 + 0.22 * Math.random());
+    // Blanco azulado tenue: ninguna partícula llega al umbral de bloom.
+    c.copy(brisa).lerp(blanco, 0.45).multiplyScalar(0.16 + 0.22 * Math.random());
     c.toArray(colores, p * 3);
   }
 

@@ -13,10 +13,10 @@ const W = 720;
 const H = 1520;
 const TEAM = ['Laura Tatiana', 'Daniel Casallas', 'Yasmin Becerra'];
 const C = {
-  text: '#eef0f7',
-  muted: 'rgba(238,240,247,0.6)',
-  accent: '#a78bfa',
-  accentSoft: '#c4b5fd',
+  text: '#fff6de', // crema
+  muted: 'rgba(255,246,222,0.62)',
+  accent: '#86c5ff', // Sea Breeze
+  accentSoft: '#ffa62b', // Citrus Zest
   ok: '#34d399',
 };
 
@@ -41,7 +41,7 @@ export function createEnding({ scene, camera, audio }) {
   const lookAt = new THREE.Vector3();
   let fitDist = 10;
 
-  // Partículas violeta que flotan alrededor del teléfono.
+  // Partículas crema que flotan alrededor del teléfono.
   const N = 140;
   const pos = new Float32Array(N * 3);
   const seeds = Array.from({ length: N }, () => ({
@@ -56,7 +56,7 @@ export function createEnding({ scene, camera, audio }) {
     pGeo,
     new THREE.PointsMaterial({
       size: 0.09,
-      color: 0xc4b5fd,
+      color: 0xf8e6a0,
       map: dotTexture(),
       transparent: true,
       opacity: 0,
@@ -74,7 +74,7 @@ export function createEnding({ scene, camera, audio }) {
     const group = new THREE.Group();
     const body = new THREE.Mesh(
       new THREE.BoxGeometry(4, 8.1, 0.4),
-      new THREE.MeshStandardMaterial({ color: 0x1b1c22, metalness: 0.6, roughness: 0.35, fog: false }),
+      new THREE.MeshStandardMaterial({ color: 0x1a2338, metalness: 0.6, roughness: 0.35, fog: false }),
     );
     const face = new THREE.Mesh(new THREE.PlaneGeometry(3.6, 7.6), new THREE.MeshBasicMaterial({ fog: false }));
     face.position.z = 0.21;
@@ -168,14 +168,14 @@ export function createEnding({ scene, camera, audio }) {
 
     // fondo
     const bg = g.createLinearGradient(0, 0, 0, H);
-    bg.addColorStop(0, '#0f0c1f');
-    bg.addColorStop(1, '#06060b');
+    bg.addColorStop(0, '#0f2148');
+    bg.addColorStop(1, '#060d1e');
     g.globalAlpha = 1;
     g.fillStyle = bg;
     g.fillRect(0, 0, W, H);
     const glow = g.createRadialGradient(W / 2, 300, 0, W / 2, 300, 520);
-    glow.addColorStop(0, `rgba(167,139,250,${0.22 * a(0)})`);
-    glow.addColorStop(1, 'rgba(167,139,250,0)');
+    glow.addColorStop(0, `rgba(134,197,255,${0.22 * a(0)})`);
+    glow.addColorStop(1, 'rgba(134,197,255,0)');
     g.fillStyle = glow;
     g.fillRect(0, 0, W, H);
 
@@ -196,7 +196,7 @@ export function createEnding({ scene, camera, audio }) {
     g.font = '500 38px system-ui, sans-serif';
     g.fillText('Proyecto', W / 2, 560);
 
-    // "CiberFamilias": Ciber en blanco, Familias en violeta
+    // "CiberFamilias": Ciber en crema, Familias en Citrus
     g.globalAlpha = a(0.85);
     g.font = '700 86px system-ui, sans-serif';
     const w1 = g.measureText('Ciber').width;
@@ -226,7 +226,7 @@ export function createEnding({ scene, camera, audio }) {
     // resumen de lo registrado
     g.globalAlpha = a(1.9);
     roundRect(g, 70, 900, W - 140, 170, 22);
-    g.strokeStyle = 'rgba(238,240,247,0.14)';
+    g.strokeStyle = 'rgba(255,246,222,0.14)';
     g.lineWidth = 2;
     g.stroke();
     g.textAlign = 'left';

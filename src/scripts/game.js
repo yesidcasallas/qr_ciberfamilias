@@ -29,7 +29,7 @@ export function createGame({ world, hud, player, camera, audio, portal, onFinish
     Object.assign(d.style, {
       position: 'fixed',
       inset: '0',
-      background: '#eef0f7',
+      background: '#fff6de',
       opacity: '0',
       zIndex: '45',
       pointerEvents: 'none',
@@ -496,11 +496,11 @@ function createLessonCard(camera) {
 }
 
 function drawCard(g, W, H, lesson, touch) {
-  const tone = lesson.tone === 'danger' ? '#fb7185' : lesson.tone === 'safe' ? '#34d399' : '#a78bfa';
+  const tone = lesson.tone === 'danger' ? '#fb7185' : lesson.tone === 'safe' ? '#34d399' : '#86c5ff';
   roundRect(g, 4, 4, W - 8, H - 8, 36);
-  g.fillStyle = 'rgba(14,15,22,0.94)';
+  g.fillStyle = 'rgba(9,20,44,0.94)';
   g.fill();
-  g.strokeStyle = 'rgba(238,240,247,0.14)';
+  g.strokeStyle = 'rgba(255,246,222,0.14)';
   g.lineWidth = 3;
   g.stroke();
   g.fillStyle = tone;
@@ -509,13 +509,13 @@ function drawCard(g, W, H, lesson, touch) {
   g.fillStyle = tone;
   g.font = '600 30px system-ui, sans-serif';
   g.fillText(lesson.kind.toUpperCase(), 60, 84);
-  g.fillStyle = '#eef0f7';
+  g.fillStyle = '#fff6de';
   g.font = '600 50px system-ui, sans-serif';
   g.fillText(lesson.title, 60, 152);
-  g.fillStyle = 'rgba(238,240,247,0.72)';
+  g.fillStyle = 'rgba(255,246,222,0.76)';
   g.font = '500 34px system-ui, sans-serif';
   wrapText(g, lesson.body, 60, H * 0.58, W - 120, 46);
-  g.fillStyle = 'rgba(196,181,253,0.9)';
+  g.fillStyle = 'rgba(134,197,255,0.92)';
   g.font = '500 28px system-ui, sans-serif';
   g.fillText(touch ? 'Toca o camina para continuar' : 'Haz clic o camina para continuar', 60, H - 44);
 }

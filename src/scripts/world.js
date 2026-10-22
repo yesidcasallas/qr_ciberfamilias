@@ -3,15 +3,15 @@ import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.j
 
 // Paleta (strings para canvas, hex para three).
 const C = {
-  bg: '#05060a',
-  panel: '#0c0e16',
-  accent: '#a78bfa',
-  cyan: '#22d3ee',
+  bg: '#071126', // noche Amalfi
+  panel: '#0d1a33',
+  accent: '#86c5ff', // Sea Breeze
+  cyan: '#86c5ff',
   ok: '#34d399',
   bad: '#fb7185',
-  amber: '#fbbf24',
-  text: '#eef0f7',
-  muted: 'rgba(238,240,247,0.6)',
+  amber: '#ffa62b', // Citrus Zest
+  text: '#fff6de', // crema
+  muted: 'rgba(255,246,222,0.62)',
 };
 
 const GATE_Z = -17;
@@ -29,8 +29,8 @@ export function buildWorld(scene) {
   scene.add(root);
 
   // ---------- Luces ----------
-  // Iluminación sobria: luz neutra y un único acento violeta.
-  scene.add(new THREE.HemisphereLight(0xc9c9dc, 0x08080c, 1.3));
+  // Iluminación sobria: luz fría de noche, el acento Sea Breeze y un toque cálido crema.
+  scene.add(new THREE.HemisphereLight(0xcfe2ff, 0x07101f, 1.3));
   scene.add(new THREE.AmbientLight(0xffffff, 0.38));
   const dir = new THREE.DirectionalLight(0xffffff, 0.8);
   dir.position.set(4, 10, 6);
@@ -39,20 +39,20 @@ export function buildWorld(scene) {
   spawnGlow.position.set(0, 3, -2);
   const glowA = new THREE.PointLight(C.accent, 22, 24);
   glowA.position.set(-3, 3, -14);
-  const glowC = new THREE.PointLight(0xdcdcf0, 18, 24);
+  const glowC = new THREE.PointLight(0xffe7b0, 18, 24);
   glowC.position.set(3, 3, -28);
   scene.add(spawnGlow, glowA, glowC);
 
   // ---------- Suelo y paredes: superficies mate, sin rejillas; sin techo (arriba se ve el cielo) ----------
   const floor = new THREE.Mesh(
     new THREE.PlaneGeometry(14, 64),
-    new THREE.MeshStandardMaterial({ color: 0x1b1c25, metalness: 0.2, roughness: 0.75 }),
+    new THREE.MeshStandardMaterial({ color: 0x172238, metalness: 0.2, roughness: 0.75 }),
   );
   floor.rotation.x = -Math.PI / 2;
   floor.position.z = -26;
   root.add(floor);
 
-  const wallMat = new THREE.MeshStandardMaterial({ color: 0x17181f, metalness: 0, roughness: 0.95, side: THREE.DoubleSide });
+  const wallMat = new THREE.MeshStandardMaterial({ color: 0x131d33, metalness: 0, roughness: 0.95, side: THREE.DoubleSide });
   for (const side of [-1, 1]) {
     const wall = new THREE.Mesh(new THREE.PlaneGeometry(64, 6), wallMat);
     wall.rotation.y = side < 0 ? Math.PI / 2 : -Math.PI / 2;
@@ -86,12 +86,12 @@ export function buildWorld(scene) {
   ];
   for (const ad of ads) {
     const group = new THREE.Group();
-    // Tarjeta sobria: fondo oscuro, borde fino, una etiqueta violeta y texto blanco.
+    // Tarjeta sobria: fondo azul noche, borde fino, una etiqueta Sea Breeze y texto crema.
     const screen = signMesh(ad.w, ad.h, (g, W, H) => {
       roundRect(g, 0, 0, W, H, 28);
-      g.fillStyle = '#101117';
+      g.fillStyle = '#0d1830';
       g.fill();
-      g.strokeStyle = 'rgba(238,240,247,0.14)';
+      g.strokeStyle = 'rgba(255,246,222,0.14)';
       g.lineWidth = 3;
       g.stroke();
       g.textAlign = 'left';
@@ -144,7 +144,7 @@ export function buildWorld(scene) {
     },
   ]);
   // Las tres ventanas comparten el mismo estilo neutro: solo el dominio y el texto delatan cuál es segura.
-  const WINDOW_EMISSIVE = 0x2a2c36;
+  const WINDOW_EMISSIVE = 0x24365c;
   const windowXs = [-3.7, 0, 3.7];
   windowDefs.forEach((def, i) => {
     const group = new THREE.Group();
@@ -153,7 +153,7 @@ export function buildWorld(scene) {
     const screen = live.mesh;
     const frame = new THREE.Mesh(
       new RoundedBoxGeometry(3.1, 2.2, 0.12, 3, 0.08),
-      new THREE.MeshStandardMaterial({ color: 0x14161f, emissive: WINDOW_EMISSIVE, emissiveIntensity: 0.25, metalness: 0.3, roughness: 0.6 }),
+      new THREE.MeshStandardMaterial({ color: 0x111c33, emissive: WINDOW_EMISSIVE, emissiveIntensity: 0.25, metalness: 0.3, roughness: 0.6 }),
     );
     frame.position.z = -0.08;
     group.add(frame, screen);
@@ -182,13 +182,13 @@ export function buildWorld(scene) {
   });
 
   // ---------- Barrera (se abre al elegir la ventana segura) ----------
-  // Velo violeta tenue, sin rejilla: se ve que hay un límite sin gritarlo.
+  // Velo Sea Breeze tenue, sin rejilla: se ve que hay un límite sin gritarlo.
   const gateMat = new THREE.MeshBasicMaterial({ color: C.accent, transparent: true, opacity: 0.07, side: THREE.DoubleSide });
   const gate = new THREE.Mesh(new THREE.PlaneGeometry(11, 5), gateMat);
   gate.position.set(0, 2.5, GATE_Z);
   root.add(gate);
   const gateLabel = signMesh(4, 0.6, (g, W, H) => {
-    g.fillStyle = 'rgba(196,181,253,0.85)';
+    g.fillStyle = 'rgba(134,197,255,0.88)';
     g.font = '500 36px system-ui, sans-serif';
     g.textAlign = 'center';
     g.fillText('Elige el portal seguro para continuar', W / 2, H * 0.66);
@@ -230,7 +230,7 @@ export function buildWorld(scene) {
 
     const pedestal = new THREE.Mesh(
       new THREE.CylinderGeometry(0.55, 0.65, 0.9, 24),
-      new THREE.MeshStandardMaterial({ color: 0x12141d, metalness: 0.5, roughness: 0.5, emissive: new THREE.Color(C.accent).multiplyScalar(0.08) }),
+      new THREE.MeshStandardMaterial({ color: 0x101a30, metalness: 0.5, roughness: 0.5, emissive: new THREE.Color(C.accent).multiplyScalar(0.08) }),
     );
     pedestal.position.y = 0.45;
     group.add(pedestal);
@@ -287,7 +287,7 @@ export function buildWorld(scene) {
   const tvGroup = new THREE.Group();
   tvGroup.position.set(-4, 0, -33);
   tvGroup.rotation.y = Math.PI / 2; // la pantalla mira al centro del pasillo
-  const plastic = new THREE.MeshStandardMaterial({ color: 0x1b1d24, metalness: 0.2, roughness: 0.75 });
+  const plastic = new THREE.MeshStandardMaterial({ color: 0x1b2233, metalness: 0.2, roughness: 0.75 });
   const crt = new THREE.Mesh(new RoundedBoxGeometry(2.2, 1.8, 1.7, 4, 0.1), plastic);
   crt.position.y = 1.5;
   tvGroup.add(crt);
@@ -405,9 +405,9 @@ export function buildWorld(scene) {
 // Base de ventana neutra: el único dato que distingue la oficial es la barra de dirección.
 function drawWindowChrome(g, W, H, def) {
   roundRect(g, 0, 0, W, H, 28);
-  g.fillStyle = '#101117';
+  g.fillStyle = '#0d1830';
   g.fill();
-  g.strokeStyle = 'rgba(238,240,247,0.12)';
+  g.strokeStyle = 'rgba(255,246,222,0.12)';
   g.lineWidth = 3;
   g.stroke();
   roundRect(g, 40, 34, W - 80, 72, 36);
@@ -490,7 +490,7 @@ const BUTTON = { w: 340, h: 88, bottom: 146 };
 
 function outlinedButton(g, W, H, label) {
   roundRect(g, (W - BUTTON.w) / 2, H - BUTTON.bottom, BUTTON.w, BUTTON.h, 44);
-  g.strokeStyle = 'rgba(238,240,247,0.7)';
+  g.strokeStyle = 'rgba(255,246,222,0.7)';
   g.lineWidth = 3;
   g.stroke();
   g.textAlign = 'center';
@@ -515,14 +515,14 @@ function drawInputBox(g, x, y, w, h, text, placeholder, caret, error, active = t
   roundRect(g, x, y, w, h, 18);
   g.fillStyle = 'rgba(255,255,255,0.04)';
   g.fill();
-  g.strokeStyle = error ? C.bad : active ? C.accent : 'rgba(238,240,247,0.28)';
+  g.strokeStyle = error ? C.bad : active ? C.accent : 'rgba(255,246,222,0.45)';
   g.lineWidth = 3;
   g.stroke();
   g.textAlign = 'left';
   g.font = '500 42px system-ui, sans-serif';
   const pad = 28;
   const shown = text ? fitTail(g, text, w - pad * 2 - 12) : '';
-  g.fillStyle = text ? C.text : 'rgba(238,240,247,0.32)';
+  g.fillStyle = text ? C.text : 'rgba(255,246,222,0.58)';
   g.fillText(text ? shown : placeholder, x + pad, y + h / 2 + 15);
   if (caret) {
     const cx = x + pad + (text ? g.measureText(shown).width : 0) + 4;
@@ -559,7 +559,7 @@ function drawTvOff(g, W, H) {
   g.fillStyle = 'rgba(0,0,0,0.25)';
   for (let y = 0; y < H; y += 4) g.fillRect(0, y, W, 2);
   g.textAlign = 'left';
-  g.fillStyle = 'rgba(238,240,247,0.25)';
+  g.fillStyle = 'rgba(255,246,222,0.25)';
   g.font = '500 30px system-ui, sans-serif';
   g.fillText('AV · 1', 36, H - 36);
 }
@@ -611,13 +611,13 @@ function drawTvConfirm(g, W, H, text) {
 // Pantalla señuelo "sin señal": oscura y sobria.
 function drawStatic(g, W, H) {
   roundRect(g, 0, 0, W, H, 24);
-  g.fillStyle = '#0d0e14';
+  g.fillStyle = '#0c1428';
   g.fill();
-  g.strokeStyle = 'rgba(238,240,247,0.1)';
+  g.strokeStyle = 'rgba(255,246,222,0.1)';
   g.lineWidth = 3;
   g.stroke();
   g.textAlign = 'center';
-  g.fillStyle = 'rgba(238,240,247,0.45)';
+  g.fillStyle = 'rgba(255,246,222,0.6)';
   g.font = '500 48px system-ui, sans-serif';
   g.fillText('Sin señal', W / 2, H * 0.55);
 }
@@ -630,7 +630,7 @@ function mat(color, emissive = 0x000000, e = 0) {
 
 function makeRecorder() {
   const g = new THREE.Group();
-  const body = new THREE.Mesh(new RoundedBoxGeometry(0.9, 0.55, 0.2, 3, 0.05), mat(0x3b3550, C.accent, 0.2));
+  const body = new THREE.Mesh(new RoundedBoxGeometry(0.9, 0.55, 0.2, 3, 0.05), mat(0x34466e, C.accent, 0.2));
   g.add(body);
   for (const x of [-0.18, 0.18]) {
     const reel = new THREE.Mesh(new THREE.CylinderGeometry(0.11, 0.11, 0.05, 20), mat(0x101018));

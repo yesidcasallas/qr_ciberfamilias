@@ -17,6 +17,7 @@ export default defineConfig({
         'three/addons/postprocessing/RenderPass.js',
         'three/addons/postprocessing/UnrealBloomPass.js',
         'three/addons/postprocessing/OutputPass.js',
+        'qrcode', // la pantalla del QR (/qr): sin esto, tras reiniciar el servidor puede no cargar al primer intento
       ],
     },
   },
