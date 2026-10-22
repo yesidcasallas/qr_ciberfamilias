@@ -1,9 +1,10 @@
 ---
 /**
  * Plantilla del portal, el formulario sencillo y la pantalla del QR de CiberFamilias.
- * El simulador (index.astro) tiene la suya: nada de aquí lo afecta.
+ * El simulador (simulador.astro) tiene la suya: nada de aquí lo afecta.
  */
 import '../styles/ciber.css';
+import { logos } from '../data/logos.js';
 
 const {
   title,
@@ -17,9 +18,10 @@ const {
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-    <meta name="theme-color" content="#05060a" />
+    <meta name="theme-color" content="#fffcf5" />
     <meta name="description" content={description} />
-    <link rel="icon" href="/ciberfamilias.svg" type="image/svg+xml" />
+    <link rel="icon" href={logos.icon} type="image/png" />
+    <link rel="apple-touch-icon" href={logos.icon} />
     <title>{title}</title>
   </head>
   <body class={bodyClass}>
@@ -28,21 +30,21 @@ const {
       <svg viewBox="0 0 100 100" preserveAspectRatio="none">
         <defs>
           <linearGradient id="camino" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0" stop-color="#a78bfa" stop-opacity="0" />
-            <stop offset="1" stop-color="#a78bfa" stop-opacity="0.1" />
+            <stop offset="0" stop-color="#2e5aa7" stop-opacity="0" />
+            <stop offset="1" stop-color="#2e5aa7" stop-opacity="0.05" />
           </linearGradient>
         </defs>
         <path d="M50 0 L30 100 L70 100 Z" fill="url(#camino)" />
-        <g fill="none" stroke="#c4b5fd" stroke-width="1">
-          <path vector-effect="non-scaling-stroke" stroke-opacity="0.34" d="M50 0 L30 100 M50 0 L70 100" />
+        <g fill="none" stroke="#2e5aa7" stroke-width="1">
+          <path vector-effect="non-scaling-stroke" stroke-opacity="0.2" d="M50 0 L30 100 M50 0 L70 100" />
           <path
             vector-effect="non-scaling-stroke"
-            stroke-opacity="0.08"
+            stroke-opacity="0.05"
             d="M50 0 L-70 100 M50 0 L-24 100 M50 0 L6 100 M50 0 L94 100 M50 0 L124 100 M50 0 L170 100"
           />
           <path
             vector-effect="non-scaling-stroke"
-            stroke-opacity="0.07"
+            stroke-opacity="0.04"
             d="M0 4 H100 M0 10 H100 M0 19 H100 M0 32 H100 M0 50 H100 M0 75 H100"
           />
         </g>

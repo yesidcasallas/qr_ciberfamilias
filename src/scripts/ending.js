@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { roundRect, wrapText } from './world.js';
+import { logos } from '../data/logos.js';
 
 /**
  * Final del recorrido, dentro de la escena (sin modales): el teléfono flota en el vacío y
@@ -13,10 +14,10 @@ const W = 720;
 const H = 1520;
 const TEAM = ['Laura Tatiana', 'Daniel Casallas', 'Yasmin Becerra'];
 const C = {
-  text: '#eef0f7',
-  muted: 'rgba(238,240,247,0.6)',
-  accent: '#a78bfa',
-  accentSoft: '#c4b5fd',
+  text: '#fff6de', // crema
+  muted: 'rgba(255,246,222,0.62)',
+  accent: '#86c5ff', // Sea Breeze
+  accentSoft: '#86c5ff', // Sea Breeze
   ok: '#34d399',
 };
 
@@ -34,6 +35,8 @@ export function createEnding({ scene, camera, audio }) {
   let info = null;
   let screen = null;
   let lastDraw = -1;
+  const brandIcon = loadLogo(logos.icon);
+  const brandLogo = loadLogo(logos.white);
   const center = new THREE.Vector3();
   const normal = new THREE.Vector3();
   const camFrom = new THREE.Vector3();
@@ -41,7 +44,16 @@ export function createEnding({ scene, camera, audio }) {
   const lookAt = new THREE.Vector3();
   let fitDist = 10;
 
-  // Partículas violeta que flotan alrededor del teléfono.
+  function loadLogo(src) {
+    const image = new Image();
+    image.onload = () => {
+      if (active) draw(t);
+    };
+    image.src = src;
+    return image;
+  }
+
+  // Partículas crema que flotan alrededor del teléfono.
   const N = 140;
   const pos = new Float32Array(N * 3);
   const seeds = Array.from({ length: N }, () => ({
@@ -56,7 +68,7 @@ export function createEnding({ scene, camera, audio }) {
     pGeo,
     new THREE.PointsMaterial({
       size: 0.09,
-      color: 0xc4b5fd,
+      color: 0xfff6de,
       map: dotTexture(),
       transparent: true,
       opacity: 0,
@@ -74,7 +86,7 @@ export function createEnding({ scene, camera, audio }) {
     const group = new THREE.Group();
     const body = new THREE.Mesh(
       new THREE.BoxGeometry(4, 8.1, 0.4),
-      new THREE.MeshStandardMaterial({ color: 0x1b1c22, metalness: 0.6, roughness: 0.35, fog: false }),
+      new THREE.MeshStandardMaterial({ color: 0x1a2338, metalness: 0.6, roughness: 0.35, fog: false }),
     );
     const face = new THREE.Mesh(new THREE.PlaneGeometry(3.6, 7.6), new THREE.MeshBasicMaterial({ fog: false }));
     face.position.z = 0.21;
@@ -168,46 +180,42 @@ export function createEnding({ scene, camera, audio }) {
 
     // fondo
     const bg = g.createLinearGradient(0, 0, 0, H);
-    bg.addColorStop(0, '#0f0c1f');
-    bg.addColorStop(1, '#06060b');
+    bg.addColorStop(0, '#0f2148');
+    bg.addColorStop(1, '#060d1e');
     g.globalAlpha = 1;
     g.fillStyle = bg;
     g.fillRect(0, 0, W, H);
     const glow = g.createRadialGradient(W / 2, 300, 0, W / 2, 300, 520);
-    glow.addColorStop(0, `rgba(167,139,250,${0.22 * a(0)})`);
-    glow.addColorStop(1, 'rgba(167,139,250,0)');
+    glow.addColorStop(0, `rgba(134,197,255,${0.22 * a(0)})`);
+    glow.addColorStop(1, 'rgba(134,197,255,0)');
     g.fillStyle = glow;
     g.fillRect(0, 0, W, H);
 
     g.textAlign = 'center';
     g.textBaseline = 'alphabetic';
 
-    // escudo con una familia: el sello de CiberFamilias
+    // Símbolo oficial sobre el fondo oscuro del teléfono.
     g.globalAlpha = a(0.2);
-    drawShield(g, W / 2, 260, 1.5, C.accent);
+    if (brandIcon.complete && brandIcon.naturalWidth) {
+      g.drawImage(brandIcon, (W - 300) / 2, 110, 300, 300);
+    }
 
     g.globalAlpha = a(0.45);
     g.fillStyle = C.ok;
     g.font = '600 26px system-ui, sans-serif';
     spaced(g, 'FORMULARIO COMPLETADO', W / 2, 470, 4);
 
-    g.globalAlpha = a(0.65);
-    g.fillStyle = C.muted;
-    g.font = '500 38px system-ui, sans-serif';
-    g.fillText('Proyecto', W / 2, 560);
-
-    // "CiberFamilias": Ciber en blanco, Familias en violeta
+    // La versión blanca conserva el contraste y la identidad del semillero.
     g.globalAlpha = a(0.85);
-    g.font = '700 86px system-ui, sans-serif';
-    const w1 = g.measureText('Ciber').width;
-    const w2 = g.measureText('Familias').width;
-    const x0 = (W - (w1 + w2)) / 2;
-    g.textAlign = 'left';
-    g.fillStyle = C.text;
-    g.fillText('Ciber', x0, 650);
-    g.fillStyle = C.accentSoft;
-    g.fillText('Familias', x0 + w1, 650);
-    g.textAlign = 'center';
+    if (brandLogo.complete && brandLogo.naturalWidth) {
+      const width = W - 100;
+      const height = width * brandLogo.naturalHeight / brandLogo.naturalWidth;
+      g.drawImage(brandLogo, 50, 510, width, height);
+    } else {
+      g.font = '700 78px system-ui, sans-serif';
+      g.fillStyle = C.text;
+      g.fillText('CiberFamilias', W / 2, 650);
+    }
 
     g.globalAlpha = a(1.3);
     g.fillStyle = C.text;
@@ -226,7 +234,7 @@ export function createEnding({ scene, camera, audio }) {
     // resumen de lo registrado
     g.globalAlpha = a(1.9);
     roundRect(g, 70, 900, W - 140, 170, 22);
-    g.strokeStyle = 'rgba(238,240,247,0.14)';
+    g.strokeStyle = 'rgba(255,246,222,0.14)';
     g.lineWidth = 2;
     g.stroke();
     g.textAlign = 'left';
@@ -266,50 +274,6 @@ export function createEnding({ scene, camera, audio }) {
 }
 
 // ---------------- dibujo ----------------
-
-/** Escudo (seguridad) con tres figuras (familia): sello minimalista de CiberFamilias. */
-function drawShield(g, cx, cy, s, color) {
-  g.save();
-  g.translate(cx, cy);
-  g.scale(s, s);
-  g.beginPath();
-  g.moveTo(0, -62);
-  g.bezierCurveTo(26, -50, 48, -48, 60, -46);
-  g.lineTo(60, 2);
-  g.bezierCurveTo(60, 42, 32, 64, 0, 78);
-  g.bezierCurveTo(-32, 64, -60, 42, -60, 2);
-  g.lineTo(-60, -46);
-  g.bezierCurveTo(-48, -48, -26, -50, 0, -62);
-  g.closePath();
-  g.strokeStyle = color;
-  g.lineWidth = 4;
-  g.stroke();
-  g.fillStyle = color;
-  // cabezas
-  for (const [x, y, r] of [
-    [-24, -12, 8],
-    [0, -20, 10],
-    [24, -12, 8],
-  ]) {
-    g.beginPath();
-    g.arc(x, y, r, 0, Math.PI * 2);
-    g.fill();
-  }
-  // hombros
-  g.lineWidth = 4;
-  for (const [x, w, top] of [
-    [-24, 13, 2],
-    [0, 16, -4],
-    [24, 13, 2],
-  ]) {
-    g.beginPath();
-    g.moveTo(x - w, 34);
-    g.quadraticCurveTo(x - w, top, x, top);
-    g.quadraticCurveTo(x + w, top, x + w, 34);
-    g.stroke();
-  }
-  g.restore();
-}
 
 /** Texto con espaciado entre letras (para rótulos en mayúsculas). */
 function spaced(g, text, cx, y, spacing) {

@@ -1,26 +1,34 @@
 /*
  * Portal, formulario sencillo y pantalla del QR de CiberFamilias.
- * El simulador (index.astro) usa su propio global.css: estos estilos no lo tocan.
- * Misma línea visual: casi negro, mate, un solo acento violeta; verde y rojo solo como respuesta.
+ * El simulador (simulador.astro) usa su propio global.css: estos estilos no lo tocan.
+ * Minimalista, con la paleta Amalfi: fondo plano casi blanco, texto azul marino y un solo acento,
+ * el azul Amalfi. Del resto de la paleta solo hay toques: la línea del horizonte (Citrus Zest), el
+ * fondo de los íconos (Sea Breeze) y el de la nota (Cream Gelato). Verde y rojo solo como respuesta.
  */
 
 :root {
-  --bg: #05060a;
-  --surface: rgba(17, 18, 27, 0.72);
-  --surface-strong: rgba(14, 15, 22, 0.94);
-  --text: #eef0f7;
-  --muted: rgba(238, 240, 247, 0.66);
-  --faint: rgba(238, 240, 247, 0.44);
-  --line: rgba(238, 240, 247, 0.11);
-  --line-strong: rgba(238, 240, 247, 0.2);
-  --accent: #a78bfa;
-  --accent-soft: #c4b5fd;
-  --accent-ink: #15102b;
-  --ok: #34d399;
-  --bad: #fb7185;
+  /* Paleta Amalfi */
+  --citrus: #ffa62b; /* Citrus Zest */
+  --sea: #86c5ff; /* Sea Breeze */
+  --amalfi: #2e5aa7; /* Amalfi Tile */
+  --cream: #f8e6a0; /* Cream Gelato */
+  --ink: #13254a; /* azul marino: el texto */
+
+  --bg: #fffcf5;
+  --surface: #ffffff;
+  --surface-strong: #ffffff;
+  --text: var(--ink);
+  --muted: rgba(19, 37, 74, 0.76);
+  --faint: rgba(19, 37, 74, 0.66);
+  --line: rgba(19, 37, 74, 0.1);
+  --line-strong: rgba(46, 90, 167, 0.7);
+  --accent: var(--amalfi);
+  --accent-ink: #ffffff;
+  --ok: #157347;
+  --bad: #b42318;
   --horizon: 68%;
   --font: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-  color-scheme: dark;
+  color-scheme: light;
 }
 
 *,
@@ -56,7 +64,7 @@ a {
 }
 
 :focus-visible {
-  outline: 2px solid var(--accent-soft);
+  outline: 2px solid var(--accent);
   outline-offset: 3px;
 }
 
@@ -67,9 +75,7 @@ a {
   inset: 0;
   z-index: -1;
   pointer-events: none;
-  background:
-    radial-gradient(90% 46% at 50% var(--horizon), rgba(167, 139, 250, 0.2), transparent 70%),
-    linear-gradient(180deg, #05060a 0%, #06060c 45%, #0c0a18 var(--horizon), #06060b 100%);
+  background: var(--bg);
 }
 
 /* línea del horizonte */
@@ -80,8 +86,7 @@ a {
   right: 0;
   top: var(--horizon);
   height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(196, 181, 253, 0.6) 50%, transparent);
-  box-shadow: 0 0 28px 2px rgba(167, 139, 250, 0.35);
+  background: linear-gradient(90deg, transparent, rgba(255, 166, 43, 0.85) 50%, transparent);
 }
 
 /* el camino: líneas en perspectiva que se pierden en el horizonte */
@@ -100,11 +105,24 @@ a {
 .seal {
   display: block;
   height: auto;
-  color: var(--accent);
+  object-fit: contain;
+}
+
+.logo {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+  object-fit: contain;
+}
+
+.title .logo {
+  width: min(560px, 100%);
+  margin-inline: auto;
 }
 
 .fam {
-  color: var(--accent-soft);
+  color: var(--accent);
 }
 
 .topbar {
@@ -127,8 +145,8 @@ a {
   text-decoration: none;
 }
 
-.brand .seal {
-  width: 22px;
+.brand .logo {
+  width: clamp(150px, 26vw, 210px);
 }
 
 .back {
@@ -224,13 +242,13 @@ a {
   display: inline-block;
   margin-bottom: 10px;
   padding: 3px 10px;
-  border: 1px solid rgba(196, 181, 253, 0.35);
+  border: 1px solid rgba(46, 90, 167, 0.3);
   border-radius: 999px;
   font-size: 11px;
   font-weight: 600;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--accent-soft);
+  color: var(--accent);
 }
 
 /* ---------- Portal ---------- */
@@ -243,11 +261,6 @@ a {
   animation: rise 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) both;
 }
 
-.hero > .seal {
-  width: 58px;
-  margin: 0 auto 18px;
-}
-
 /* En el portal el horizonte es la primera pantalla y se va con el scroll: no cruza los textos. */
 .portal {
   --horizon: 76%;
@@ -257,11 +270,7 @@ a {
   position: absolute;
   height: 100vh;
   height: 100svh;
-  /* el resplandor se funde con el fondo al final de la primera pantalla (sin corte) */
-  background:
-    linear-gradient(180deg, transparent 80%, var(--bg)),
-    radial-gradient(90% 46% at 50% var(--horizon), rgba(167, 139, 250, 0.2), transparent 70%),
-    linear-gradient(180deg, #05060a 0%, #06060c 45%, #0c0a18 var(--horizon), #06060b 100%);
+  background: var(--bg);
 }
 
 .portal .horizon svg {
@@ -337,8 +346,8 @@ html:has(.portal) {
 }
 
 .choice:hover {
-  border-color: rgba(167, 139, 250, 0.5);
-  background-color: rgba(24, 22, 38, 0.8);
+  border-color: rgba(46, 90, 167, 0.45);
+  box-shadow: 0 10px 30px -18px rgba(19, 37, 74, 0.35);
   transform: translateY(-2px);
 }
 
@@ -348,8 +357,8 @@ html:has(.portal) {
   width: 48px;
   height: 48px;
   border-radius: 14px;
-  background: rgba(167, 139, 250, 0.12);
-  color: var(--accent-soft);
+  background: rgba(134, 197, 255, 0.18);
+  color: var(--accent);
 }
 
 .choice h2 {
@@ -379,7 +388,7 @@ html:has(.portal) {
   gap: 6px;
   font-size: 15px;
   font-weight: 600;
-  color: var(--accent-soft);
+  color: var(--accent);
 }
 
 .choice .go svg {
@@ -451,7 +460,7 @@ html:has(.portal) {
   padding: 14px 16px;
   border-left: 2px solid var(--accent);
   border-radius: 0 12px 12px 0;
-  background: rgba(167, 139, 250, 0.07);
+  background: rgba(248, 230, 160, 0.3);
   font-size: 15px;
   color: var(--text);
 }
@@ -504,7 +513,7 @@ html:has(.portal) {
   padding: 8px 14px;
   border: 1px solid var(--line);
   border-radius: 999px;
-  background: rgba(238, 240, 247, 0.03);
+  background: var(--surface);
   font-size: 14px;
 }
 
@@ -545,14 +554,14 @@ html:has(.portal) {
   padding: 22px;
   border: 1px solid var(--line);
   border-radius: 20px;
-  background: linear-gradient(135deg, rgba(167, 139, 250, 0.13), rgba(17, 18, 27, 0.72) 62%);
+  background: var(--surface);
 }
 
 .reach b {
   font-size: clamp(52px, 13vw, 76px);
   line-height: 1;
   letter-spacing: -0.04em;
-  color: var(--accent-soft);
+  color: var(--accent);
 }
 
 .section .reach p {
@@ -656,6 +665,10 @@ html:has(.portal) {
   color: var(--text);
 }
 
+.footer .brand .logo {
+  width: min(280px, 100%);
+}
+
 /* ---------- Formulario sencillo ---------- */
 
 .form-page {
@@ -672,12 +685,12 @@ html:has(.portal) {
   border: 1px solid var(--line);
   border-radius: 24px;
   background: var(--surface-strong);
-  box-shadow: 0 30px 80px -30px rgba(0, 0, 0, 0.9);
+  box-shadow: 0 24px 60px -32px rgba(19, 37, 74, 0.28);
   animation: rise 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) both;
 }
 
 .panel > .seal {
-  width: 40px;
+  width: 64px;
   margin-bottom: 18px;
 }
 
@@ -710,7 +723,7 @@ html:has(.portal) {
   padding: 0 16px;
   border: 1px solid var(--line-strong);
   border-radius: 14px;
-  background: rgba(5, 6, 10, 0.6);
+  background: #ffffff;
   color: var(--text);
   font: inherit;
   font-size: 16px; /* 16px: el celular no hace zoom al escribir */
@@ -718,13 +731,13 @@ html:has(.portal) {
 }
 
 .field input::placeholder {
-  color: rgba(238, 240, 247, 0.32);
+  color: rgba(19, 37, 74, 0.64);
 }
 
 .field input:focus {
   outline: none;
   border-color: var(--accent);
-  box-shadow: 0 0 0 4px rgba(167, 139, 250, 0.18);
+  box-shadow: 0 0 0 4px rgba(46, 90, 167, 0.2);
 }
 
 .field.invalid input {
@@ -732,7 +745,7 @@ html:has(.portal) {
 }
 
 .field.invalid input:focus {
-  box-shadow: 0 0 0 4px rgba(251, 113, 133, 0.16);
+  box-shadow: 0 0 0 4px rgba(180, 35, 24, 0.16);
 }
 
 .field .error {
@@ -772,11 +785,6 @@ html:has(.portal) {
 
 .done {
   text-align: center;
-}
-
-.done > .seal {
-  width: 64px;
-  margin: 4px auto 16px;
 }
 
 .done .title {
@@ -874,11 +882,6 @@ html:has(.portal) {
   animation: rise 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) both;
 }
 
-.qr-copy .seal {
-  width: clamp(40px, 5.5vh, 96px);
-  margin: 0 auto 1.8vh;
-}
-
 .qr-copy .eyebrow {
   font-size: clamp(12px, 1.6vh, 18px);
 }
@@ -922,11 +925,11 @@ html:has(.portal) {
   flex: 0 0 auto;
   width: 1.9em;
   height: 1.9em;
-  border: 1px solid rgba(196, 181, 253, 0.5);
+  border: 1px solid rgba(46, 90, 167, 0.4);
   border-radius: 50%;
   font-size: 0.8em;
   font-weight: 700;
-  color: var(--accent-soft);
+  color: var(--accent);
 }
 
 .qr-quote {
@@ -951,8 +954,8 @@ html:has(.portal) {
   border-radius: clamp(18px, 3vh, 34px);
   background: #fff;
   box-shadow:
-    0 0 0 1px rgba(255, 255, 255, 0.12),
-    0 40px 120px -20px rgba(167, 139, 250, 0.5);
+    0 0 0 1px var(--line),
+    0 24px 70px -30px rgba(19, 37, 74, 0.3);
   animation: rise 0.7s 0.1s cubic-bezier(0.2, 0.8, 0.2, 1) both;
 }
 
@@ -972,7 +975,7 @@ html:has(.portal) {
   margin: 1.2vh 0 0;
   font: 600 clamp(13px, 2.2vh, 26px) / 1.25 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
   text-align: center;
-  color: var(--accent-ink);
+  color: var(--ink);
   overflow-wrap: anywhere;
 }
 
@@ -989,9 +992,8 @@ html:has(.portal) {
     align-self: center;
   }
 
-  .qr-copy .seal {
-    width: clamp(52px, 8vh, 96px);
-    margin: 0 0 2.6vh;
+  .qr-copy .logo {
+    margin-inline: 0;
   }
 
   .qr-copy .title {
@@ -1026,7 +1028,7 @@ html:has(.portal) {
   height: 42px;
   border: 1px solid var(--line);
   border-radius: 12px;
-  background: rgba(14, 15, 22, 0.6);
+  background: rgba(255, 255, 255, 0.7);
   color: var(--muted);
   cursor: pointer;
   opacity: 0.6;
@@ -1048,9 +1050,9 @@ html:has(.portal) {
   max-width: min(680px, calc(100% - 32px));
   margin: 0;
   padding: 10px 16px;
-  border: 1px solid rgba(251, 113, 133, 0.45);
+  border: 1px solid rgba(180, 35, 24, 0.45);
   border-radius: 12px;
-  background: rgba(14, 15, 22, 0.94);
+  background: rgba(255, 255, 255, 0.96);
   font-size: 14px;
   text-align: center;
   transform: translateX(-50%);

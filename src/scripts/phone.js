@@ -33,16 +33,16 @@ import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.j
  *     propia (pose de inicio) en un WebGLRenderTarget y restaura el render target previo (cara y mipmap
  *     incluidos) y renderer.autoClear. Las luces hijas de la cámara principal (la luz del jugador) acompañan a
  *     esa cámara durante ese render. El RT se libera (dispose) al terminar cada secuencia y se recrea solo.
- *   - Velo: <div> position:fixed, inset:0, pointer-events:none, z-index:45. Claro (#eef0f7) al empezar el outro,
+ *   - Velo: <div> position:fixed, inset:0, pointer-events:none, z-index:45. Claro (#fff6de) al empezar el outro,
  *     donde continúa el destello de salida del juego; casi negro cuando la entrada se salta o corre sin apertura,
  *     para que el cambio de vista no sea brusco. Avanza con update(dt) (también después de cb, con isActive ya en
  *     false) y se elimina al apagarse.
  *   - prefers-reduced-motion: la animación corre 3x más rápido, el giro de llegada es corto y no hay apertura.
  */
 
-// Paleta del proyecto: casi negro y un solo acento.
-const VIOLETA = 0xa78bfa;
-const GRAFITO = 0x1b1c22;
+// Paleta Amalfi: el teléfono en grafito azulado y el acento Sea Breeze.
+const BRISA = 0x86c5ff; // Sea Breeze
+const GRAFITO = 0x1a2338; // grafito azulado
 
 // ---------- Teléfono (unidades de mundo, escala "héroe") ----------
 const CUERPO_W = 4.0;
@@ -62,7 +62,7 @@ const PANTALLA_ASPECTO = PANTALLA_W / PANTALLA_H;
 const Z_VIDRIO = FRENTE_Z + 0.004;
 const Z_PANTALLA = FRENTE_Z + 0.008;
 const Z_ISLA = FRENTE_Z + 0.012;
-const HALO_MAX = 0.3; // opacidad del halo violeta trasero (aditivo, muy tenue)
+const HALO_MAX = 0.22; // opacidad del halo Sea Breeze trasero (aditivo, muy tenue)
 
 // ---------- Escenario aislado del pasillo (x∈[-6.6, 6.6], z∈[-58, 6]) ----------
 const CENTRO = new THREE.Vector3(0, 1.6, 55); // centro del teléfono en reposo (no se muta)
@@ -115,8 +115,8 @@ const DESTELLO = {
   outroBaja: 0.5,
   saltoBaja: 0.2,
   entradaBaja: 0.35, // entrada saltada o sin apertura: fundido desde casi negro
-  claro: '#eef0f7',
-  oscuro: '#05060a', // el fondo del simulador
+  claro: '#fff6de',
+  oscuro: '#071126', // el fondo del simulador
   z: 45,
 };
 const VELOCIDAD_REDUCIDA = 3;
@@ -303,12 +303,12 @@ export function createPhone({ scene, renderer }) {
   micro.position.set(modX + 0.4, modY - 0.5, zModulo - 0.005);
   pivote.add(flashLed, micro);
 
-  // ---------- Halo violeta muy tenue detrás: separa el teléfono oscuro del fondo oscuro ----------
+  // ---------- Halo Sea Breeze muy tenue detrás: separa el teléfono oscuro del fondo oscuro ----------
   const halo = new THREE.Mesh(
     new THREE.PlaneGeometry(1, 1),
     new THREE.MeshBasicMaterial({
       map: crearTexturaHalo(),
-      color: VIOLETA,
+      color: BRISA,
       transparent: true,
       opacity: 0,
       blending: THREE.AdditiveBlending,
@@ -719,12 +719,12 @@ function suavizarNormales(geo) {
 
 /**
  * Entorno de estudio para los reflejos del teléfono (PMREM, se genera una vez): fondo casi negro, un softbox
- * arriba al frente, un recorte blanco a la izquierda, una tira violeta a la derecha (el acento) y un rebote
+ * arriba al frente, un recorte blanco a la izquierda, una tira Sea Breeze a la derecha (el acento) y un rebote
  * tenue desde abajo. Se usa como material.envMap: no toca scene.environment ni añade luces a la escena.
  */
 function crearEstudio(renderer) {
   const escena = new THREE.Scene();
-  escena.background = new THREE.Color(0x050608);
+  escena.background = new THREE.Color(0x060c1a);
   const geo = new THREE.PlaneGeometry(1, 1);
   const mats = [];
   const panel = (color, intensidad, w, h, x, y, z) => {
@@ -741,7 +741,7 @@ function crearEstudio(renderer) {
   };
   panel(0xffffff, 1.8, 7, 3.5, -1.5, 6, 4.5); // softbox principal
   panel(0xffffff, 1.1, 1.4, 9, -7, 0.5, -1); // recorte izquierdo
-  panel(VIOLETA, 1.6, 1.2, 9, 7, 0.5, -2); // acento violeta
+  panel(BRISA, 1.0, 1.2, 9, 7, 0.5, -2); // acento Sea Breeze
   panel(0xb8bccc, 0.22, 12, 12, 0, -7, 2); // rebote del piso
   const pmrem = new THREE.PMREMGenerator(renderer);
   const textura = pmrem.fromScene(escena, 0.02).texture;

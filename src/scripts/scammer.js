@@ -14,13 +14,28 @@ const BUBBLE_T = 3.8; // segundos que se ve cada subtítulo
 
 export function createScammer({ gltf, world, player, camera, audio, game, hud }) {
   const model = gltf.scene;
-  // Paleta minimalista: ojos y enlace del celular en violeta suave (un solo acento).
+  // Paleta Amalfi: ojos, enlace y ribete en Citrus (el brillo del estafador avisa "cuidado"); su celular
+  // en Sea Breeze y crema; la piel y la túnica pasan del violeta del modelo al azul.
+  const citrico = new THREE.Color(0xffa62b);
   model.traverse((o) => {
     if (!o.isMesh) return;
     for (const mat of Array.isArray(o.material) ? o.material : [o.material]) {
       if (mat.name === 'Eyes_Glow' || mat.name === 'Phone_Link') {
-        mat.color?.set(0xc4b5fd);
-        mat.emissive?.set(0xc4b5fd);
+        mat.color?.set(0xffa62b);
+        mat.emissive?.set(0xffa62b);
+      } else if (mat.name === 'Trim') {
+        mat.color.copy(citrico).multiplyScalar(0.3); // apagado: el ribete acompaña, no compite con los ojos
+        mat.emissive.copy(citrico).multiplyScalar(0.18);
+      } else if (mat.name === 'Phone_Screen') {
+        mat.color.set(0x86c5ff);
+        mat.emissive.set(0x86c5ff);
+      } else if (mat.name === 'Phone_UI') {
+        mat.color.set(0xfff6de);
+        mat.emissive.set(0xfff6de);
+      } else if (mat.name === 'Skin' || mat.name === 'Robe') {
+        const hsl = {};
+        mat.color.getHSL(hsl);
+        mat.color.setHSL(0.6, hsl.s, hsl.l);
       }
     }
   });
@@ -271,37 +286,37 @@ function makeOfferPanel(world) {
 
 function drawOffer(g, W, H) {
   roundRect(g, 4, 4, W - 8, H - 8, 34);
-  g.fillStyle = 'rgba(14,15,22,0.95)';
+  g.fillStyle = 'rgba(9,20,44,0.95)';
   g.fill();
-  g.strokeStyle = 'rgba(167,139,250,0.6)';
+  g.strokeStyle = 'rgba(255,166,43,0.65)';
   g.lineWidth = 4;
   g.stroke();
   g.textAlign = 'left';
-  g.fillStyle = '#a78bfa';
+  g.fillStyle = '#ffa62b';
   g.font = '600 30px system-ui, sans-serif';
   g.fillText('OFERTA DEL ESTAFADOR', 60, 84);
-  g.fillStyle = '#eef0f7';
+  g.fillStyle = '#fff6de';
   g.font = '600 66px system-ui, sans-serif';
   g.fillText('Salida rápida', 60, 168);
-  g.fillStyle = 'rgba(238,240,247,0.7)';
+  g.fillStyle = 'rgba(255,246,222,0.7)';
   g.font = '500 36px system-ui, sans-serif';
   wrapText(g, 'Te saco del teléfono ahora mismo. Solo necesito tu contraseña.', 60, 268, W - 120, 48);
   // botón tentador
   roundRect(g, 60, H - 236, W - 120, 104, 52);
-  g.fillStyle = '#a78bfa';
+  g.fillStyle = '#ffa62b';
   g.fill();
   g.textAlign = 'center';
-  g.fillStyle = '#15102b';
+  g.fillStyle = '#13254a';
   g.font = '700 42px system-ui, sans-serif';
   g.fillText('Aceptar atajo', W / 2, H - 236 + 68);
-  g.fillStyle = 'rgba(238,240,247,0.5)';
+  g.fillStyle = 'rgba(255,246,222,0.5)';
   g.font = '500 28px system-ui, sans-serif';
   g.fillText('Aléjate para rechazar', W / 2, H - 70);
 }
 
 function drawOfferRobbed(g, W, H, hint) {
   roundRect(g, 4, 4, W - 8, H - 8, 34);
-  g.fillStyle = 'rgba(14,15,22,0.95)';
+  g.fillStyle = 'rgba(9,20,44,0.95)';
   g.fill();
   g.strokeStyle = 'rgba(251,113,133,0.7)';
   g.lineWidth = 4;
@@ -310,20 +325,20 @@ function drawOfferRobbed(g, W, H, hint) {
   g.fillStyle = '#fb7185';
   g.font = '600 60px system-ui, sans-serif';
   g.fillText('Te robaron la cuenta', W / 2, 140);
-  g.fillStyle = '#eef0f7';
+  g.fillStyle = '#fff6de';
   g.font = '500 34px system-ui, sans-serif';
   g.fillText('Aceptaste el atajo de un desconocido', W / 2, 210);
-  g.fillStyle = 'rgba(238,240,247,0.65)';
+  g.fillStyle = 'rgba(255,246,222,0.65)';
   g.font = '500 31px system-ui, sans-serif';
   wrapText(g, 'Nadie legítimo te pide la contraseña a cambio de un atajo. Era ingeniería social: un pretexto con urgencia.', W / 2, 360, W - 120, 42);
-  g.fillStyle = '#c4b5fd';
+  g.fillStyle = '#86c5ff';
   g.font = '600 32px system-ui, sans-serif';
   g.fillText(hint, W / 2, H - 70);
 }
 
 // ---------------- subtítulo ----------------
 
-/** Subtítulo flotante: técnica rotulada en violeta + la frase en cursiva. */
+/** Subtítulo flotante: técnica rotulada en Citrus + la frase en cursiva. */
 function makeBubble() {
   const canvas = document.createElement('canvas');
   canvas.width = 1024;
@@ -349,14 +364,14 @@ function makeBubble() {
       g.beginPath();
       if (g.roundRect) g.roundRect(x, 16, w, 188, 40);
       else g.rect(x, 16, w, 188);
-      g.fillStyle = 'rgba(14,15,22,0.78)';
+      g.fillStyle = 'rgba(9,20,44,0.8)';
       g.fill();
       g.textAlign = 'center';
       g.textBaseline = 'middle';
-      g.fillStyle = '#a78bfa';
+      g.fillStyle = '#ffa62b';
       g.font = '700 26px system-ui, sans-serif';
       g.fillText(label, canvas.width / 2, 62);
-      g.fillStyle = 'rgba(221,214,254,0.96)';
+      g.fillStyle = 'rgba(255,246,222,0.96)';
       g.font = 'italic 500 46px system-ui, sans-serif';
       g.fillText(text, canvas.width / 2, 132);
       texture.needsUpdate = true;

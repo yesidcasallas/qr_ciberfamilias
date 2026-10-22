@@ -74,7 +74,7 @@ function start(renderer) {
   const camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.1, 200);
   // Luz de acento que acompaña al jugador: ilumina lo cercano al caminar.
   scene.add(camera);
-  const playerGlow = new THREE.PointLight(0xdcdcf0, 6, 9, 2);
+  const playerGlow = new THREE.PointLight(0xeef2fa, 6, 9, 2);
   playerGlow.position.set(0, 0.3, 0.6);
   camera.add(playerGlow);
 
@@ -172,14 +172,14 @@ function start(renderer) {
     robot.scale.setScalar(0.4);
     robot.position.set(3.4, 0, -4.5);
     robot.rotation.y = -0.8; // mira hacia el jugador
-    // Paleta minimalista: el naranja original pasa a gris claro con un matiz violeta.
+    // Paleta Amalfi: el naranja original pasa a gris claro con un matiz azul.
     robot.traverse((o) => {
       if (!o.isMesh) return;
       for (const mat of Array.isArray(o.material) ? o.material : [o.material]) {
         if (!mat.color) continue;
         const hsl = {};
         mat.color.getHSL(hsl);
-        mat.color.setHSL(0.72, 0.12, hsl.l);
+        mat.color.setHSL(0.6, 0.16, hsl.l);
       }
     });
     const mixer = new THREE.AnimationMixer(robot);
