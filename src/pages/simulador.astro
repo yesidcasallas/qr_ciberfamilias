@@ -1,6 +1,7 @@
 ---
 import '../styles/global.css';
 import { guardaRespuestas } from '../scripts/registro.js';
+import { logos } from '../data/logos.js';
 
 // Con Supabase configurado, al terminar se guardan correo y universidad (solo con autorización).
 const saving = guardaRespuestas;
@@ -16,7 +17,8 @@ const saving = guardaRespuestas;
     />
     <meta name="theme-color" content="#071126" />
     <meta name="description" content="Simulador 3D de concientización: entra al teléfono y aprende a detectar fraudes digitales." />
-    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href={logos.icon} type="image/png" />
+    <link rel="apple-touch-icon" href={logos.icon} />
     <title>Dentro del teléfono · Simulador de ciberseguridad</title>
   </head>
   <body>

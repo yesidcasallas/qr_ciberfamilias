@@ -1,15 +1,14 @@
 ---
 // Portal al que lleva el QR: presenta CiberFamilias y deja elegir cómo participar.
 import Ciber from '../layouts/Ciber.astro';
-import Seal from '../components/Seal.astro';
+import Logo from '../components/Logo.astro';
 ---
 
 <Ciber title="CiberFamilias · Elige cómo participar" bodyClass="portal">
   <main>
     <section class="hero" aria-labelledby="titulo">
-      <Seal />
       <p class="eyebrow">Actividad de seguridad digital</p>
-      <h1 class="title" id="titulo"><small>Proyecto </small>Ciber<span class="fam">Familias</span></h1>
+      <h1 class="title" id="titulo"><Logo /></h1>
       <p class="lede">El conocimiento es el camino hacia una vida digital más segura y tranquila.</p>
 
       <p class="choices-label">Elige cómo quieres participar</p>
@@ -182,7 +181,7 @@ import Seal from '../components/Seal.astro';
   </main>
 
   <footer class="footer">
-    <p class="brand"><Seal /><span>Proyecto Ciber<span class="fam">Familias</span></span></p>
+    <p class="brand"><Logo variant="navy" /></p>
     <p>Ingeniería de Sistemas · UNIMINUTO</p>
     <p>Integrantes: Laura Tatiana · Daniel Casallas · Yasmin Becerra</p>
   </footer>

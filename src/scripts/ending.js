@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { roundRect, wrapText } from './world.js';
+import { logos } from '../data/logos.js';
 
 /**
  * Final del recorrido, dentro de la escena (sin modales): el teléfono flota en el vacío y
@@ -34,12 +35,23 @@ export function createEnding({ scene, camera, audio }) {
   let info = null;
   let screen = null;
   let lastDraw = -1;
+  const brandIcon = loadLogo(logos.icon);
+  const brandLogo = loadLogo(logos.white);
   const center = new THREE.Vector3();
   const normal = new THREE.Vector3();
   const camFrom = new THREE.Vector3();
   const camTo = new THREE.Vector3();
   const lookAt = new THREE.Vector3();
   let fitDist = 10;
+
+  function loadLogo(src) {
+    const image = new Image();
+    image.onload = () => {
+      if (active) draw(t);
+    };
+    image.src = src;
+    return image;
+  }
 
   // Partículas crema que flotan alrededor del teléfono.
   const N = 140;
@@ -182,32 +194,28 @@ export function createEnding({ scene, camera, audio }) {
     g.textAlign = 'center';
     g.textBaseline = 'alphabetic';
 
-    // escudo con una familia: el sello de CiberFamilias
+    // Símbolo oficial sobre el fondo oscuro del teléfono.
     g.globalAlpha = a(0.2);
-    drawShield(g, W / 2, 260, 1.5, C.accent);
+    if (brandIcon.complete && brandIcon.naturalWidth) {
+      g.drawImage(brandIcon, (W - 300) / 2, 110, 300, 300);
+    }
 
     g.globalAlpha = a(0.45);
     g.fillStyle = C.ok;
     g.font = '600 26px system-ui, sans-serif';
     spaced(g, 'FORMULARIO COMPLETADO', W / 2, 470, 4);
 
-    g.globalAlpha = a(0.65);
-    g.fillStyle = C.muted;
-    g.font = '500 38px system-ui, sans-serif';
-    g.fillText('Proyecto', W / 2, 560);
-
-    // "CiberFamilias": Ciber en crema, Familias en Sea Breeze
+    // La versión blanca conserva el contraste y la identidad del semillero.
     g.globalAlpha = a(0.85);
-    g.font = '700 86px system-ui, sans-serif';
-    const w1 = g.measureText('Ciber').width;
-    const w2 = g.measureText('Familias').width;
-    const x0 = (W - (w1 + w2)) / 2;
-    g.textAlign = 'left';
-    g.fillStyle = C.text;
-    g.fillText('Ciber', x0, 650);
-    g.fillStyle = C.accentSoft;
-    g.fillText('Familias', x0 + w1, 650);
-    g.textAlign = 'center';
+    if (brandLogo.complete && brandLogo.naturalWidth) {
+      const width = W - 100;
+      const height = width * brandLogo.naturalHeight / brandLogo.naturalWidth;
+      g.drawImage(brandLogo, 50, 510, width, height);
+    } else {
+      g.font = '700 78px system-ui, sans-serif';
+      g.fillStyle = C.text;
+      g.fillText('CiberFamilias', W / 2, 650);
+    }
 
     g.globalAlpha = a(1.3);
     g.fillStyle = C.text;
@@ -266,50 +274,6 @@ export function createEnding({ scene, camera, audio }) {
 }
 
 // ---------------- dibujo ----------------
-
-/** Escudo (seguridad) con tres figuras (familia): sello minimalista de CiberFamilias. */
-function drawShield(g, cx, cy, s, color) {
-  g.save();
-  g.translate(cx, cy);
-  g.scale(s, s);
-  g.beginPath();
-  g.moveTo(0, -62);
-  g.bezierCurveTo(26, -50, 48, -48, 60, -46);
-  g.lineTo(60, 2);
-  g.bezierCurveTo(60, 42, 32, 64, 0, 78);
-  g.bezierCurveTo(-32, 64, -60, 42, -60, 2);
-  g.lineTo(-60, -46);
-  g.bezierCurveTo(-48, -48, -26, -50, 0, -62);
-  g.closePath();
-  g.strokeStyle = color;
-  g.lineWidth = 4;
-  g.stroke();
-  g.fillStyle = color;
-  // cabezas
-  for (const [x, y, r] of [
-    [-24, -12, 8],
-    [0, -20, 10],
-    [24, -12, 8],
-  ]) {
-    g.beginPath();
-    g.arc(x, y, r, 0, Math.PI * 2);
-    g.fill();
-  }
-  // hombros
-  g.lineWidth = 4;
-  for (const [x, w, top] of [
-    [-24, 13, 2],
-    [0, 16, -4],
-    [24, 13, 2],
-  ]) {
-    g.beginPath();
-    g.moveTo(x - w, 34);
-    g.quadraticCurveTo(x - w, top, x, top);
-    g.quadraticCurveTo(x + w, top, x + w, 34);
-    g.stroke();
-  }
-  g.restore();
-}
 
 /** Texto con espaciado entre letras (para rótulos en mayúsculas). */
 function spaced(g, text, cx, y, spacing) {

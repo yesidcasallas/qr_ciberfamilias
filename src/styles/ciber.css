@@ -105,7 +105,20 @@ a {
 .seal {
   display: block;
   height: auto;
-  color: var(--accent);
+  object-fit: contain;
+}
+
+.logo {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+  object-fit: contain;
+}
+
+.title .logo {
+  width: min(560px, 100%);
+  margin-inline: auto;
 }
 
 .fam {
@@ -132,8 +145,8 @@ a {
   text-decoration: none;
 }
 
-.brand .seal {
-  width: 22px;
+.brand .logo {
+  width: clamp(150px, 26vw, 210px);
 }
 
 .back {
@@ -246,11 +259,6 @@ a {
   padding: 40px 20px 0;
   text-align: center;
   animation: rise 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) both;
-}
-
-.hero > .seal {
-  width: 58px;
-  margin: 0 auto 18px;
 }
 
 /* En el portal el horizonte es la primera pantalla y se va con el scroll: no cruza los textos. */
@@ -657,6 +665,10 @@ html:has(.portal) {
   color: var(--text);
 }
 
+.footer .brand .logo {
+  width: min(280px, 100%);
+}
+
 /* ---------- Formulario sencillo ---------- */
 
 .form-page {
@@ -678,7 +690,7 @@ html:has(.portal) {
 }
 
 .panel > .seal {
-  width: 40px;
+  width: 64px;
   margin-bottom: 18px;
 }
 
@@ -775,11 +787,6 @@ html:has(.portal) {
   text-align: center;
 }
 
-.done > .seal {
-  width: 64px;
-  margin: 4px auto 16px;
-}
-
 .done .title {
   font-size: clamp(36px, 10vw, 46px);
 }
@@ -873,11 +880,6 @@ html:has(.portal) {
 .qr-copy {
   min-width: 0;
   animation: rise 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) both;
-}
-
-.qr-copy .seal {
-  width: clamp(40px, 5.5vh, 96px);
-  margin: 0 auto 1.8vh;
 }
 
 .qr-copy .eyebrow {
@@ -990,9 +992,8 @@ html:has(.portal) {
     align-self: center;
   }
 
-  .qr-copy .seal {
-    width: clamp(52px, 8vh, 96px);
-    margin: 0 0 2.6vh;
+  .qr-copy .logo {
+    margin-inline: 0;
   }
 
   .qr-copy .title {

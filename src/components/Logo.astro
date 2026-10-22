@@ -1,0 +1,14 @@
+---
+import { logos } from '../data/logos.js';
+
+const { variant = 'color', class: className } = Astro.props;
+---
+
+<img
+  class:list={['logo', className]}
+  src={logos[variant]}
+  width="2000"
+  height="667"
+  alt="CiberFamilias · Semillero Spyware"
+  decoding="async"
+/>
