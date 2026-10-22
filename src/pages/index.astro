@@ -1,8 +1,9 @@
 ---
 import '../styles/global.css';
+import { guardaRespuestas } from '../scripts/registro.js';
 
-// Con PUBLIC_SHEETS_URL, al terminar se guardan correo y universidad (solo con autorización).
-const saving = Boolean(import.meta.env.PUBLIC_SHEETS_URL);
+// Con Supabase configurado, al terminar se guardan correo y universidad (solo con autorización).
+const saving = guardaRespuestas;
 ---
 
 <!doctype html>

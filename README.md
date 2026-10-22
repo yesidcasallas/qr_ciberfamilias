@@ -6,7 +6,7 @@ fraudes**: ignorar los cebos, resistir la ingeniería social, registrar tu corre
 el sitio oficial y encontrar la salida. Hecho con **Astro** + **three.js**, estética minimalista.
 
 > 100 % educativo. Por defecto nada de lo que escribes se envía ni se guarda; si se configura
-> una hoja de Google, solo se guarda con autorización (ver «Guardar respuestas en Google Sheets»).
+> Supabase, solo se guarda con autorización (ver «Guardar respuestas en Supabase»).
 > Los sitios y mensajes "fraudulentos" solo sirven para aprender a reconocerlos.
 
 **Integrantes:** Laura Tatiana · Daniel Casallas · Yasmin Becerra
@@ -48,7 +48,7 @@ la pantalla para que siempre veas lo que tecleas, también con el teclado del ce
 |---|---|
 | `/` | El simulador 3D. |
 | `/portal` | Destino del QR: presenta el Proyecto CiberFamilias y deja elegir entre el simulador y el formulario. |
-| `/formulario` | Versión sencilla: correo y universidad, y agradecimiento. Guarda en Google Sheets solo si hay una hoja configurada y la persona lo autoriza. |
+| `/formulario` | Versión sencilla: correo y universidad, y agradecimiento. Guarda en Supabase solo si está configurado y la persona lo autoriza. |
 | `/qr` | Pantalla para proyectar: el QR que lleva al portal del mismo sitio (botón o tecla **F**: pantalla completa). Con `?url=https://…` apunta a otra dirección. |
 
 En una presentación local, abre `/qr` con la dirección de red que muestra `pnpm dev`
@@ -70,25 +70,29 @@ pnpm test      # pruebas de las reglas del dominio (src/entities) y de la regla 
 Sitio estático (`dist/`): funciona en **Vercel** (detecta Astro), **Netlify**
 (build `pnpm build`, publish `dist`) o **Cloudflare Pages** (preset Astro).
 
-## Guardar respuestas en Google Sheets
+## Guardar respuestas en Supabase
 
-Sin configurar nada, el sitio no guarda ni envía datos (y las páginas lo dicen). Para recibir
-las respuestas en una hoja de cálculo:
+Sin configurar nada, el sitio no guarda ni envía datos (y las páginas lo dicen). Para guardar las
+respuestas en Supabase:
 
-1. Crea una hoja en Google Sheets (mejor con la cuenta del proyecto).
-2. **Extensiones → Apps Script**: borra lo que haya, pega `google-apps-script/Codigo.gs` y guarda.
-3. **Implementar → Nueva implementación → Aplicación web**. Ejecutar como: *Yo*.
-   Quién tiene acceso: *Cualquier persona*. Implementa y autoriza: Google avisa que la app no está
-   verificada porque es tuya (*Configuración avanzada → Ir a… → Permitir*). Solo pide acceso a esa hoja.
-4. Copia la URL que termina en `/exec` y ponla en un archivo `.env` (ver `.env.example`):
-   `PUBLIC_SHEETS_URL=https://script.google.com/macros/s/…/exec`, y reinicia `pnpm dev`.
-   Al publicar en Vercel o Netlify, agrega esa misma variable en la configuración del proyecto.
+1. En el proyecto de Supabase, **SQL Editor**: pega `supabase/respuestas.sql` y dale **Run**. Crea la
+   tabla `respuestas` y sus permisos.
+2. Pon la URL del proyecto y la clave publicable (`sb_publishable_…`) en un archivo `.env`
+   (ver `.env.example`) y reinicia `pnpm dev`:
+   `PUBLIC_SUPABASE_URL=https://….supabase.co` y `PUBLIC_SUPABASE_PUBLISHABLE_KEY=sb_publishable_…`.
+3. Al publicar en Vercel o Netlify, agrega esas dos variables con esos mismos nombres en la
+   configuración del proyecto (en Astro empiezan por `PUBLIC_`, no por `NEXT_PUBLIC_`) y vuelve a desplegar.
 
-Con la hoja configurada aparece una casilla de autorización (Ley 1581 de 2012) en el formulario,
+La clave publicable queda a la vista en el código de la página, y está hecha para eso: con ella solo
+se pueden **agregar** filas. Nadie puede leer, cambiar ni borrar respuestas con esa clave; se ven en
+**Table Editor → respuestas** con la sesión del equipo. Nunca pongas en el sitio la clave secreta
+(`sb_secret_…`).
+
+Con Supabase configurado aparece una casilla de autorización (Ley 1581 de 2012) en el formulario,
 obligatoria para enviar, y en la entrada del simulador, opcional. Se guardan fecha, origen, correo
 y universidad; del simulador, además, en cuántos señuelos cayó y si resistió al estafador. Lo que
-se escribe en las ventanas falsas nunca se guarda. La URL queda visible en el código del sitio:
-cualquiera podría enviar filas falsas (se borran de la hoja).
+se escribe en las ventanas falsas nunca se guarda. Como la clave es pública, alguien podría agregar
+filas falsas (se borran desde el Table Editor).
 
 ## Modelos 3D, voz y licencias (todo de uso libre)
 
@@ -131,7 +135,7 @@ páginas solo les avisan lo que pasa.
 - `src/scripts/environment.js` — cielo, columnas y partículas.
 - `src/scripts/portal.js` — portal de regreso al inicio.
 - `src/scripts/audio.js` — sonido sintetizado y voz.
-- `src/scripts/registro.js` — envía las respuestas autorizadas a Google Sheets (`google-apps-script/Codigo.gs`).
+- `src/scripts/registro.js` — guarda las respuestas autorizadas en Supabase (tabla de `supabase/respuestas.sql`).
 
 ## Inspiración
 

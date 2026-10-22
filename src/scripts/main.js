@@ -35,7 +35,7 @@ const el = {
   mute: $('mute'),
   hint: $('hint'),
   typer: $('typer'),
-  consent: $('consent'), // solo existe si hay una hoja de Google configurada
+  consent: $('consent'), // solo existe si el sitio guarda respuestas (Supabase configurado)
 };
 
 let renderer;
@@ -123,7 +123,7 @@ function start(renderer) {
   // Final: la cámara sale del teléfono y su pantalla muestra los créditos del Proyecto CiberFamilias.
   const finish = (info) => {
     audio.stopVoice(); // el estafador se queda dentro del teléfono
-    // con autorización: el correo (del portal oficial) y la universidad van a Google Sheets
+    // con autorización: el correo (del portal oficial) y la universidad se guardan en Supabase
     if (el.consent?.checked) {
       saveResponse({
         origen: 'simulador',

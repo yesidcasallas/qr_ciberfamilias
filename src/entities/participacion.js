@@ -4,7 +4,7 @@
  * Cada pantalla pone sus propios mensajes de error; la regla vive solo aquí.
  */
 
-// nombre@dominio.ext, sin espacios (la misma regla valida google-apps-script/Codigo.gs del lado de la hoja)
+// nombre@dominio.ext, sin espacios (la tabla de Supabase valida la misma regla: supabase/respuestas.sql)
 export const CORREO_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 
 export const esCorreoValido = (texto) => CORREO_RE.test(String(texto ?? '').trim());

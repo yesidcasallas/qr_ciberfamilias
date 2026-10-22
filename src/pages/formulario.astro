@@ -2,9 +2,10 @@
 // Formulario sencillo (la alternativa al simulador): correo y universidad, y agradecimiento.
 import Ciber from '../layouts/Ciber.astro';
 import Seal from '../components/Seal.astro';
+import { guardaRespuestas } from '../scripts/registro.js';
 
-// Con PUBLIC_SHEETS_URL las respuestas van a Google Sheets, siempre con autorización.
-const saving = Boolean(import.meta.env.PUBLIC_SHEETS_URL);
+// Con Supabase configurado las respuestas se guardan, siempre con autorización.
+const saving = guardaRespuestas;
 ---
 
 <Ciber
