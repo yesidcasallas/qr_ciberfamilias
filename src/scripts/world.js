@@ -29,7 +29,7 @@ export function buildWorld(scene) {
   scene.add(root);
 
   // ---------- Luces ----------
-  // Iluminación sobria: luz fría de noche, el acento Sea Breeze y un toque cálido crema.
+  // Iluminación sobria: luz fría de noche y el acento Sea Breeze.
   scene.add(new THREE.HemisphereLight(0xcfe2ff, 0x07101f, 1.3));
   scene.add(new THREE.AmbientLight(0xffffff, 0.38));
   const dir = new THREE.DirectionalLight(0xffffff, 0.8);
@@ -39,7 +39,7 @@ export function buildWorld(scene) {
   spawnGlow.position.set(0, 3, -2);
   const glowA = new THREE.PointLight(C.accent, 22, 24);
   glowA.position.set(-3, 3, -14);
-  const glowC = new THREE.PointLight(0xffe7b0, 18, 24);
+  const glowC = new THREE.PointLight(0xe8eef8, 18, 24);
   glowC.position.set(3, 3, -28);
   scene.add(spawnGlow, glowA, glowC);
 

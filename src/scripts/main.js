@@ -74,7 +74,7 @@ function start(renderer) {
   const camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.1, 200);
   // Luz de acento que acompaña al jugador: ilumina lo cercano al caminar.
   scene.add(camera);
-  const playerGlow = new THREE.PointLight(0xfff1d6, 6, 9, 2);
+  const playerGlow = new THREE.PointLight(0xeef2fa, 6, 9, 2);
   playerGlow.position.set(0, 0.3, 0.6);
   camera.add(playerGlow);
 

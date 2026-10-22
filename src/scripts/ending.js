@@ -16,7 +16,7 @@ const C = {
   text: '#fff6de', // crema
   muted: 'rgba(255,246,222,0.62)',
   accent: '#86c5ff', // Sea Breeze
-  accentSoft: '#ffa62b', // Citrus Zest
+  accentSoft: '#86c5ff', // Sea Breeze
   ok: '#34d399',
 };
 
@@ -56,7 +56,7 @@ export function createEnding({ scene, camera, audio }) {
     pGeo,
     new THREE.PointsMaterial({
       size: 0.09,
-      color: 0xf8e6a0,
+      color: 0xfff6de,
       map: dotTexture(),
       transparent: true,
       opacity: 0,
@@ -196,7 +196,7 @@ export function createEnding({ scene, camera, audio }) {
     g.font = '500 38px system-ui, sans-serif';
     g.fillText('Proyecto', W / 2, 560);
 
-    // "CiberFamilias": Ciber en crema, Familias en Citrus
+    // "CiberFamilias": Ciber en crema, Familias en Sea Breeze
     g.globalAlpha = a(0.85);
     g.font = '700 86px system-ui, sans-serif';
     const w1 = g.measureText('Ciber').width;

@@ -1,9 +1,9 @@
 /*
  * Portal, formulario sencillo y pantalla del QR de CiberFamilias.
  * El simulador (simulador.astro) usa su propio global.css: estos estilos no lo tocan.
- * Paleta Amalfi, de día: texto azul marino sobre crema y azul Amalfi como acento. Citrus Zest y
- * Sea Breeze solo como relleno o decoración (como texto no contrastan sobre fondo claro);
- * verde y rojo solo como respuesta.
+ * Minimalista, con la paleta Amalfi: fondo plano casi blanco, texto azul marino y un solo acento,
+ * el azul Amalfi. Del resto de la paleta solo hay toques: la línea del horizonte (Citrus Zest), el
+ * fondo de los íconos (Sea Breeze) y el de la nota (Cream Gelato). Verde y rojo solo como respuesta.
  */
 
 :root {
@@ -14,13 +14,13 @@
   --cream: #f8e6a0; /* Cream Gelato */
   --ink: #13254a; /* azul marino: el texto */
 
-  --bg: #fff8e4;
-  --surface: rgba(255, 255, 255, 0.74);
+  --bg: #fffcf5;
+  --surface: #ffffff;
   --surface-strong: #ffffff;
   --text: var(--ink);
   --muted: rgba(19, 37, 74, 0.76);
   --faint: rgba(19, 37, 74, 0.66);
-  --line: rgba(46, 90, 167, 0.18);
+  --line: rgba(19, 37, 74, 0.1);
   --line-strong: rgba(46, 90, 167, 0.7);
   --accent: var(--amalfi);
   --accent-ink: #ffffff;
@@ -75,9 +75,7 @@ a {
   inset: 0;
   z-index: -1;
   pointer-events: none;
-  background:
-    radial-gradient(80% 42% at 50% var(--horizon), rgba(255, 166, 43, 0.34), transparent 70%),
-    linear-gradient(180deg, #d9edff 0%, #fff8e4 50%, #fde9ad var(--horizon), #fff8e4 100%);
+  background: var(--bg);
 }
 
 /* línea del horizonte */
@@ -88,8 +86,7 @@ a {
   right: 0;
   top: var(--horizon);
   height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(255, 166, 43, 0.95) 50%, transparent);
-  box-shadow: 0 0 28px 2px rgba(255, 166, 43, 0.45);
+  background: linear-gradient(90deg, transparent, rgba(255, 166, 43, 0.85) 50%, transparent);
 }
 
 /* el camino: líneas en perspectiva que se pierden en el horizonte */
@@ -232,9 +229,8 @@ a {
   display: inline-block;
   margin-bottom: 10px;
   padding: 3px 10px;
-  border: 1px solid rgba(46, 90, 167, 0.35);
+  border: 1px solid rgba(46, 90, 167, 0.3);
   border-radius: 999px;
-  background: rgba(134, 197, 255, 0.18);
   font-size: 11px;
   font-weight: 600;
   letter-spacing: 0.08em;
@@ -266,11 +262,7 @@ a {
   position: absolute;
   height: 100vh;
   height: 100svh;
-  /* el resplandor se funde con el fondo al final de la primera pantalla (sin corte) */
-  background:
-    linear-gradient(180deg, transparent 80%, var(--bg)),
-    radial-gradient(80% 42% at 50% var(--horizon), rgba(255, 166, 43, 0.34), transparent 70%),
-    linear-gradient(180deg, #d9edff 0%, #fff8e4 50%, #fde9ad var(--horizon), #fff8e4 100%);
+  background: var(--bg);
 }
 
 .portal .horizon svg {
@@ -346,8 +338,8 @@ html:has(.portal) {
 }
 
 .choice:hover {
-  border-color: rgba(46, 90, 167, 0.5);
-  background-color: #ffffff;
+  border-color: rgba(46, 90, 167, 0.45);
+  box-shadow: 0 10px 30px -18px rgba(19, 37, 74, 0.35);
   transform: translateY(-2px);
 }
 
@@ -357,7 +349,7 @@ html:has(.portal) {
   width: 48px;
   height: 48px;
   border-radius: 14px;
-  background: rgba(134, 197, 255, 0.35);
+  background: rgba(134, 197, 255, 0.18);
   color: var(--accent);
 }
 
@@ -458,9 +450,9 @@ html:has(.portal) {
 .section .note {
   margin-top: 18px;
   padding: 14px 16px;
-  border-left: 3px solid var(--citrus);
+  border-left: 2px solid var(--accent);
   border-radius: 0 12px 12px 0;
-  background: rgba(248, 230, 160, 0.5);
+  background: rgba(248, 230, 160, 0.3);
   font-size: 15px;
   color: var(--text);
 }
@@ -513,7 +505,7 @@ html:has(.portal) {
   padding: 8px 14px;
   border: 1px solid var(--line);
   border-radius: 999px;
-  background: rgba(134, 197, 255, 0.16);
+  background: var(--surface);
   font-size: 14px;
 }
 
@@ -554,7 +546,7 @@ html:has(.portal) {
   padding: 22px;
   border: 1px solid var(--line);
   border-radius: 20px;
-  background: linear-gradient(135deg, rgba(255, 166, 43, 0.24), rgba(255, 255, 255, 0.78) 62%);
+  background: var(--surface);
 }
 
 .reach b {
@@ -681,7 +673,7 @@ html:has(.portal) {
   border: 1px solid var(--line);
   border-radius: 24px;
   background: var(--surface-strong);
-  box-shadow: 0 30px 80px -30px rgba(19, 37, 74, 0.35);
+  box-shadow: 0 24px 60px -32px rgba(19, 37, 74, 0.28);
   animation: rise 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) both;
 }
 
@@ -931,11 +923,11 @@ html:has(.portal) {
   flex: 0 0 auto;
   width: 1.9em;
   height: 1.9em;
+  border: 1px solid rgba(46, 90, 167, 0.4);
   border-radius: 50%;
-  background: var(--citrus);
   font-size: 0.8em;
   font-weight: 700;
-  color: var(--ink);
+  color: var(--accent);
 }
 
 .qr-quote {
@@ -960,8 +952,8 @@ html:has(.portal) {
   border-radius: clamp(18px, 3vh, 34px);
   background: #fff;
   box-shadow:
-    0 0 0 1px rgba(46, 90, 167, 0.14),
-    0 40px 120px -20px rgba(46, 90, 167, 0.35);
+    0 0 0 1px var(--line),
+    0 24px 70px -30px rgba(19, 37, 74, 0.3);
   animation: rise 0.7s 0.1s cubic-bezier(0.2, 0.8, 0.2, 1) both;
 }
 

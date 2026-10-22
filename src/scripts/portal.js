@@ -20,7 +20,7 @@ import * as THREE from 'three';
 
 // Paleta del proyecto (Amalfi).
 const BRISA = 0x86c5ff; // Sea Breeze
-const CITRICO = 0xffa62b; // Citrus Zest
+const AMALFI = 0x2e5aa7; // Amalfi Tile
 
 // Geometría y tiempos.
 const RADIO_ARO = 1.3; // radio del toro
@@ -51,7 +51,7 @@ export function createPortal({ scene }) {
 
   // ---------- Aro emisivo (glow con bloom) ----------
   const brisa = new THREE.Color(BRISA);
-  const citrico = new THREE.Color(CITRICO);
+  const amalfi = new THREE.Color(AMALFI);
   const colorAro = new THREE.Color(); // reutilizable, sin asignar por frame
 
   const ring = new THREE.Mesh(
@@ -68,7 +68,7 @@ export function createPortal({ scene }) {
       uTime: { value: 0 },
       uOpacity: { value: 0 },
       uColorA: { value: new THREE.Color(BRISA) },
-      uColorB: { value: new THREE.Color(CITRICO) },
+      uColorB: { value: new THREE.Color(AMALFI) },
     },
     vertexShader: /* glsl */ `
       varying vec2 vUv;
@@ -94,7 +94,7 @@ export function createPortal({ scene }) {
         float spiral2 = sin(ang * 2.0 - r * 7.0 + uTime * 1.7);
         float swirl = 0.5 + 0.5 * spiral * spiral2;
 
-        // Color Sea Breeze→Citrus según radio y remolino.
+        // Color Sea Breeze→Amalfi según radio y remolino.
         vec3 col = mix(uColorB, uColorA, clamp(r * 0.6 + swirl * 0.5, 0.0, 1.0));
 
         // Núcleo brillante y borde que se desvanece antes de tocar el aro.
@@ -148,8 +148,8 @@ export function createPortal({ scene }) {
       positions[i3] = Math.cos(ang[i]) * r;
       positions[i3 + 1] = Math.sin(ang[i]) * r;
       positions[i3 + 2] = zBase[i] * (r / R_MAX);
-      // Color alterno Sea Breeze/Citrus, un poco sobreexpuesto para que brille.
-      c.copy(i % 2 === 0 ? brisa : citrico).multiplyScalar(1.25);
+      // Color alterno Sea Breeze/Amalfi, un poco sobreexpuesto para que brille.
+      c.copy(i % 2 === 0 ? brisa : amalfi).multiplyScalar(1.25);
       colors[i3] = c.r;
       colors[i3 + 1] = c.g;
       colors[i3 + 2] = c.b;
@@ -242,7 +242,7 @@ export function createPortal({ scene }) {
     const osc = 0.5 + 0.5 * Math.sin(elapsed * 0.8);
     // Con bloom de umbral 1.0 solo el aro (HDR) brilla; el remolino interior queda nítido.
     // Aro solo Sea Breeze: brillo suave y constante, sin quemarse a blanco. Es más luminoso que el
-    // brisa de antes, por eso los factores van ×0.64.
+    // violeta de antes, por eso los factores van ×0.64.
     colorAro.copy(brisa).multiplyScalar(0.19 + brillo * 2.05 + osc * 0.1);
     ring.material.color.copy(colorAro);
     ring.rotation.z += dt * 0.25;
