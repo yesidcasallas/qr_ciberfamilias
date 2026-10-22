@@ -46,14 +46,14 @@ la pantalla para que siempre veas lo que tecleas, también con el teclado del ce
 
 | Ruta | Qué es |
 |---|---|
-| `/` | El simulador 3D. |
-| `/portal` | Destino del QR: presenta el Proyecto CiberFamilias y deja elegir entre el simulador y el formulario. |
+| `/` | Portal y página principal (destino del QR): presenta el Proyecto CiberFamilias y deja elegir entre el simulador y el formulario. |
+| `/simulador` | El simulador 3D. |
 | `/formulario` | Versión sencilla: correo y universidad, y agradecimiento. Guarda en Supabase solo si está configurado y la persona lo autoriza. |
-| `/qr` | Pantalla para proyectar: el QR que lleva al portal del mismo sitio (botón o tecla **F**: pantalla completa). Con `?url=https://…` apunta a otra dirección. |
+| `/qr` | Pantalla para proyectar: el QR que lleva a la página principal del mismo sitio (botón o tecla **F**: pantalla completa). Con `?url=https://…` apunta a otra dirección. |
 
 En una presentación local, abre `/qr` con la dirección de red que muestra `pnpm dev`
 (Network, por ejemplo `http://192.168.x.x:4321/qr`): los celulares no pueden abrir `localhost`.
-Ya publicado, el QR apunta solo al portal del sitio publicado.
+Ya publicado, el QR apunta solo a la página principal del sitio publicado.
 
 ## Comandos (pnpm)
 
@@ -121,8 +121,8 @@ páginas solo les avisan lo que pasa.
 - `src/entities/recorrido.js` — trampas, cebos, resistencia al estafador y el resumen que muestran los créditos.
 - `src/entities/tacticas.js` — frases del estafador rotuladas con su técnica y la regla para elegir la que toca.
 - `test/` — pruebas de las entidades (`pnpm test`), incluida una que impide que importen algo de afuera.
-- `src/pages/index.astro` — HUD e intro del simulador.
-- `src/pages/portal.astro`, `formulario.astro`, `qr.astro` — portal, formulario sencillo y pantalla del QR
+- `src/pages/simulador.astro` — HUD e intro del simulador.
+- `src/pages/index.astro`, `formulario.astro`, `qr.astro` — portal (página principal), formulario sencillo y pantalla del QR
   (con `src/layouts/Ciber.astro`, `src/components/Seal.astro` y `src/styles/ciber.css`, aparte del simulador).
 - `src/scripts/main.js` — une todo: renderer, bloom, modelos glTF, bucle.
 - `src/scripts/phone.js` — el teléfono: entrada al mundo y salida (su pantalla renderiza el mundo en vivo).

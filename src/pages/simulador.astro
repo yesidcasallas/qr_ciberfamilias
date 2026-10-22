@@ -1,0 +1,92 @@
+---
+import '../styles/global.css';
+import { guardaRespuestas } from '../scripts/registro.js';
+
+// Con Supabase configurado, al terminar se guardan correo y universidad (solo con autorización).
+const saving = guardaRespuestas;
+---
+
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover, interactive-widget=resizes-content"
+    />
+    <meta name="theme-color" content="#05060a" />
+    <meta name="description" content="Simulador 3D de concientización: entra al teléfono y aprende a detectar fraudes digitales." />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <title>Dentro del teléfono · Simulador de ciberseguridad</title>
+  </head>
+  <body>
+    <div id="stage" aria-hidden="true"></div>
+    <div id="vignette" aria-hidden="true"></div>
+
+    <div id="loader"><span>Cargando el mundo…</span></div>
+
+    <!-- ---------- Intro: entrar al teléfono ---------- -->
+    <div id="intro" class="overlay" hidden>
+      <div class="panel">
+        <p class="eyebrow">Simulador de ciberseguridad</p>
+        <h1>Dentro del teléfono</h1>
+        <p class="lede">
+          Vas a entrar al mundo que hay dentro del teléfono. Camina, ignora los cebos y
+          aprende a reconocer los fraudes digitales. Al final, encuentra la salida.
+        </p>
+        {
+          saving && (
+            <label class="consent">
+              <input id="consent" type="checkbox" />
+              <span>
+                Autorizo que, al terminar, se guarden mi correo y mi universidad solo para registrar mi participación
+                (Ley 1581 de 2012). Si soy menor de edad, tengo permiso de mi acudiente.
+              </span>
+            </label>
+          )
+        }
+        <button class="btn" type="button" id="enter">Entrar al teléfono</button>
+        <p class="fineprint">
+          {
+            saving
+              ? 'Práctica educativa. Sin tu autorización no se guarda nada, y lo que escribas en los sitios falsos nunca se guarda.'
+              : 'Práctica educativa y autocontenida. Nada de lo que escribas se envía ni se guarda.'
+          }
+        </p>
+      </div>
+    </div>
+
+    <!-- ---------- HUD de juego ---------- -->
+    <div id="hud" hidden>
+      <div id="objective"><span id="objective-text">Avanza por el pasillo</span></div>
+      <button id="mute" type="button" aria-label="Silenciar sonido"></button>
+
+      <div id="prompt" hidden></div>
+
+      <!-- Controles táctiles -->
+      <div id="pad" aria-hidden="true"><div id="stick"></div></div>
+
+      <div id="hint">
+        <span class="k-desktop">WASD / flechas para caminar · arrastra para mirar · haz clic sobre un objeto para usarlo</span>
+        <span class="k-touch">Joystick para caminar · arrastra para mirar · toca los objetos</span>
+      </div>
+    </div>
+
+    <!-- Campo oculto: captura lo que se escribe (y abre el teclado en el celular). Se dibuja en 3D. -->
+    <input
+      id="typer"
+      type="text"
+      autocomplete="off"
+      autocapitalize="off"
+      spellcheck="false"
+      enterkeyhint="send"
+      aria-label="Texto que se escribe en la pantalla"
+    />
+
+    <!-- El final (Proyecto CiberFamilias + integrantes) se muestra en la pantalla del teléfono 3D. -->
+
+    <script>
+      import '../scripts/main.js';
+    </script>
+  </body>
+</html>

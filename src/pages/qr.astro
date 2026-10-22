@@ -46,7 +46,7 @@ import Seal from '../components/Seal.astro';
 
   // El QR lleva al portal del mismo sitio donde se abre esta pantalla: sirve en la red local
   // y una vez publicado. Con ?url=https://… apunta a otra dirección.
-  let target = new URL('/portal', location.origin);
+  let target = new URL('/', location.origin);
   const custom = new URLSearchParams(location.search).get('url');
   if (custom) {
     try {
