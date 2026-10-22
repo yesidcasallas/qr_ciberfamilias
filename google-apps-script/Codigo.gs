@@ -7,7 +7,13 @@
  *  2. Extensiones → Apps Script. Borra lo que haya, pega este archivo y guarda.
  *  3. Implementar → Nueva implementación → tipo "Aplicación web".
  *     Ejecutar como: "Yo". Quién tiene acceso: "Cualquier persona". Implementar y autorizar.
+ *     Google avisa que la app no está verificada (es tuya): Configuración avanzada → Ir a… → Permitir.
  *  4. Copia la URL que termina en /exec y ponla en el sitio como PUBLIC_SHEETS_URL.
+ * Si cambias este código: Implementar → Administrar implementaciones → editar → Versión nueva
+ * (así la URL no cambia).
+ *
+ * La anotación de abajo hace que solo pida acceso a esta hoja de cálculo, no a las demás de tu Drive.
+ * @OnlyCurrentDoc
  */
 const HOJA = 'Respuestas';
 const COLUMNAS = ['Fecha', 'Origen', 'Correo', 'Universidad', 'Señuelos en los que cayó', 'Resistió al estafador'];

@@ -78,7 +78,8 @@ las respuestas en una hoja de cálculo:
 1. Crea una hoja en Google Sheets (mejor con la cuenta del proyecto).
 2. **Extensiones → Apps Script**: borra lo que haya, pega `google-apps-script/Codigo.gs` y guarda.
 3. **Implementar → Nueva implementación → Aplicación web**. Ejecutar como: *Yo*.
-   Quién tiene acceso: *Cualquier persona*. Implementa y autoriza.
+   Quién tiene acceso: *Cualquier persona*. Implementa y autoriza: Google avisa que la app no está
+   verificada porque es tuya (*Configuración avanzada → Ir a… → Permitir*). Solo pide acceso a esa hoja.
 4. Copia la URL que termina en `/exec` y ponla en un archivo `.env` (ver `.env.example`):
    `PUBLIC_SHEETS_URL=https://script.google.com/macros/s/…/exec`, y reinicia `pnpm dev`.
    Al publicar en Vercel o Netlify, agrega esa misma variable en la configuración del proyecto.
